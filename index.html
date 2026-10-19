@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ByteNest</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f6fc;color:#17243b;
+font-family:Arial,sans-serif}
+header{background:#fff;padding:16px;
+display:flex;align-items:center;justify-content:space-between;
+border-bottom:1px solid #e5eaf3}
+.logo{font-size:24px;font-weight:800;color:#2878ff}
+button,input,textarea,select{font:inherit}
+button{border:0;border-radius:12px;padding:12px;
+cursor:pointer}
+.primary{background:#2878ff;color:white;font-weight:bold}
+main{max-width:760px;margin:auto;padding:18px}
+h1{font-size:27px;margin-bottom:8px}
+.muted{color:#78869d;font-size:13px}
+.search{width:100%;padding:15px;border:1px solid #dce4f1;
+border-radius:14px;background:white;margin:18px 0}
+.categories{display:flex;gap:8px;overflow:auto;
+padding-bottom:14px}
+.categories button{background:white;color:#52627a;
+white-space:nowrap;border:1px solid #e1e8f3}
+.categories button.active{background:#2878ff;color:white}
+.post{background:white;border:1px solid #e3e9f3;
+border-radius:18px;padding:16px;margin:12px 0}
+.posttop{display:flex;gap:12px;align-items:center}
+.fileicon{background:#eaf1ff;border-radius:13px;
+width:48px;height:48px;display:grid;place-items:center;
+font-size:25px;flex-shrink:0}
+.post h3{margin:0 0 6px}
+.actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
+.actions button{background:#f1f5fb;color:#40516d}
+.actions button.download{background:#2878ff;color:white}
+.tag{display:inline-block;background:#eef3fc;
+padding:5px 9px;border-radius:7px;font-size:12px}
+#publish{display:none;background:white;border:1px solid #dce5f2;
+border-radius:18px;padding:18px;margin:16px 0}
+#publish input,#publish textarea,#publish select{
+width:100%;padding:12px;margin:7px 0 12px;
+border:1px solid #dce4f1;border-radius:10px;background:white}
+#publish textarea{min-height:80px;resize:vertical}
+footer{text-align:center;padding:28px;color:#8793a6;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">▣ ByteNest</div>
+  <button class="primary" onclick="showPublish()">＋ Опубликовать</button>
+</header>
+
+<main>
+  <h1>Открывай. Создавай. Делись.</h1>
+  <div class="muted">Твои проекты — в одном месте.</div>
+
+  <input id="search" class="search"
+    placeholder="⌕  Найти файл или проект..."
+    oninput="render()">
+
+  <div class="categories" id="categories">
+    <button class="active" onclick="setCategory('Все',this)">🔥 Все</button>
+    <button onclick="setCategory('ZIP',this)">📦 ZIP</button>
+    <button onclick="setCategory('APK',this)">📱 APK</button>
+    <button onclick="setCategory('HTML',this)">🌐 HTML</button>
+    <button onclick="setCategory('Код',this)">💻 Код</button>
+    <button onclick="setCategory('Другое',this)">📁 Другое</button>
+  </div>
+
+  <section id="publish">
+    <h2>Новая публикация</h2>
+    <form id="form">
+      <label>Название проекта</label>
+      <input id="title" required maxlength="70"
+        placeholder="Например, моя первая игра">
+      <label>Описание</label>
+      <textarea id="description" required maxlength="500"
+        placeholder="Что это за проект?"></textarea>
+      <label>Категория</label>
+      <select id="type">
+        <option>ZIP</option><option>APK</option>
+        <option>HTML</option><option>Код</option>
+        <option>Другое</option>
+      </select>
+      <label>Файл</label>
+      <input id="file" type="file" required>
+      <label>Как запустить?</label>
+      <textarea id="instructions"
+        placeholder="Например: распаковать ZIP и открыть index.html"></textarea>
+      <p class="muted">Файл пока хранится только в этой демоверсии.
+      Публикация не загружается в интернет.</p>
+      <button class="primary" type="submit">Опубликовать</button>
+      <button type="button" onclick="hidePublish()">Отмена</button>
+    </form>
+  </section>
+
+  <h2>Лента проектов</h2>
+  <div id="feed"></div>
+</main>
+
+<footer>ByteNest · Делись своими проектами</footer>
+
+<script>
+let category = 'Все';
+let posts = [];
+try {
+  posts = JSON.parse(localStorage.getItem('bytenest-posts') || '[]');
+} catch(e) {}
+
+function save(){
+  try {
+    localStorage.setItem('bytenest-posts',JSON.stringify(posts));
+  } catch(e) {
+    alert('Не удалось сохранить данные браузера.');
+  }
+}
+
+function showPublish(){
+  document.getElementById('publish').style.display='block';
+  document.getElementById('publish').scrollIntoView({behavior:'smooth'});
+}
+function hidePublish(){
+  document.getElementById('publish').style.display='none';
+}
+function setCategory(value,button){
+  category=value;
+  document.querySelectorAll('.categories button')
+    .forEach(b=>b.classList.remove('active'));
+  button.classList.add('active');
+  render();
+}
+
+document.getElementById('form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const file=document.getElementById('file').files[0];
+  if(!file)return;
+  if(file.size>10*1024*1024){
+    alert('В демоверсии разрешены файлы до 10 МБ.');
+    return;
+  }
+  posts.unshift({
+    id:Date.now(),
+    title:document.getElementById('title').value.trim(),
+    description:document.getElementById('description').value.trim(),
+    type:document.getElementById('type').value,
+    filename:file.name,
+    size:file.size,
+    instructions:document.getElementById('instructions').value,
+    likes:0,
+    comments:[],
+    localFile:true,
+    safety:'Не проверен'
+  });
+  save();
+  e.target.reset();
+  hidePublish();
+  render();
+});
+
+function render(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const feed=document.getElementById('feed');
+  const shown=posts.filter(p=>
+    (category==='Все'||p.type===category)&&
+    (p.title+' '+p.description+' '+p.filename)
+      .toLowerCase().includes(q)
+  );
+  feed.innerHTML='';
+  if(!shown.length){
+    feed.innerHTML='<div class="post"><h3>Пока пусто 👀</h3>'+
+      '<p class="muted">Опубликуй первый проект или измени поиск.</p></div>';
+    return;
+  }
+  shown.forEach(p=>{
+    const el=document.createElement('article');
+    el.className='post';
+    const icons={ZIP:'📦',APK:'📱',HTML:'🌐',Код:'💻',Другое:'📁'};
+    const top=document.createElement('div');
+    top.className='posttop';
+    const ico=document.createElement('div');
+    ico.className='fileicon';
+    ico.textContent=icons[p.type]||'📁';
+    const info=document.createElement('div');
+    const h=document.createElement('h3');
+    h.textContent=p.title;
+    const meta=document.createElement('div');
+    meta.className='muted';
+    meta.textContent=p.filename+' · '+(p.size/1024/1024).toFixed(2)+' МБ';
+    info.append(h,meta);
+    top.append(ico,info);
+    const desc=document.createElement('p');
+    desc.textContent=p.description;
+    const tag=document.createElement('span');
+    tag.className='tag';
+    tag.textContent='⚪ '+p.safety;
+    const actions=document.createElement('div');
+    actions.className='actions';
+    const like=document.createElement('button');
+    like.textContent='❤️ '+p.likes;
+    like.onclick=()=>{
+      p.likes++;
+      save();
+      render();
+    };
+    const comment=document.createElement('button');
+    comment.textContent='💬 '+p.comments.length;
+    comment.onclick=()=>{
+      const value=prompt('Напиши комментарий:');
+      if(value&&value.trim()){
+        p.comments.push(value.trim());
+        save();
+        render();
+      }
+    };
+    const details=document.createElement('button');
+    details.textContent='Инструкция';
+    details.onclick=()=>alert(p.instructions||'Автор не добавил инструкцию.');
+    actions.append(like,comment,details);
+    el.append(top,desc,tag,actions);
+    feed.append(el);
+  });
+}
+render();
+</script>
+</body>
+</html>
