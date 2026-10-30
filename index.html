@@ -3,228 +3,246 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ByteNest</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Булочка!</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f3f6fc;color:#17243b;
-font-family:Arial,sans-serif}
-header{background:#fff;padding:16px;
-display:flex;align-items:center;justify-content:space-between;
-border-bottom:1px solid #e5eaf3}
-.logo{font-size:24px;font-weight:800;color:#2878ff}
-button,input,textarea,select{font:inherit}
-button{border:0;border-radius:12px;padding:12px;
-cursor:pointer}
-.primary{background:#2878ff;color:white;font-weight:bold}
-main{max-width:760px;margin:auto;padding:18px}
-h1{font-size:27px;margin-bottom:8px}
-.muted{color:#78869d;font-size:13px}
-.search{width:100%;padding:15px;border:1px solid #dce4f1;
-border-radius:14px;background:white;margin:18px 0}
-.categories{display:flex;gap:8px;overflow:auto;
-padding-bottom:14px}
-.categories button{background:white;color:#52627a;
-white-space:nowrap;border:1px solid #e1e8f3}
-.categories button.active{background:#2878ff;color:white}
-.post{background:white;border:1px solid #e3e9f3;
-border-radius:18px;padding:16px;margin:12px 0}
-.posttop{display:flex;gap:12px;align-items:center}
-.fileicon{background:#eaf1ff;border-radius:13px;
-width:48px;height:48px;display:grid;place-items:center;
-font-size:25px;flex-shrink:0}
-.post h3{margin:0 0 6px}
-.actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
-.actions button{background:#f1f5fb;color:#40516d}
-.actions button.download{background:#2878ff;color:white}
-.tag{display:inline-block;background:#eef3fc;
-padding:5px 9px;border-radius:7px;font-size:12px}
-#publish{display:none;background:white;border:1px solid #dce5f2;
-border-radius:18px;padding:18px;margin:16px 0}
-#publish input,#publish textarea,#publish select{
-width:100%;padding:12px;margin:7px 0 12px;
-border:1px solid #dce4f1;border-radius:10px;background:white}
-#publish textarea{min-height:80px;resize:vertical}
-footer{text-align:center;padding:28px;color:#8793a6;font-size:12px}
+body{margin:0;background:#172338;color:white;font-family:Arial}
+#app{height:100dvh;display:flex;flex-direction:column;max-width:520px;margin:auto}
+header,footer{padding:12px;background:#101a2b;display:flex;justify-content:space-between;align-items:center}
+#meter{height:9px;background:#26364c;margin:8px 14px;border-radius:10px;overflow:hidden}
+#fill{height:100%;width:100%;background:#52d6a0}
+#scene{position:relative;flex:1;min-height:0;background:#9bdcff;overflow:hidden;touch-action:none}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#hint{position:absolute;top:10px;width:100%;text-align:center;color:#17324a;font-size:12px;pointer-events:none}
+button{border:0;border-radius:12px;padding:11px;background:#2e83ff;color:white;font-weight:bold}
+.secondary{background:#2a3b53}
+#status{font-size:11px;text-align:center;flex:1}
+#win{display:none;position:absolute;inset:0;background:#101a2bdd;align-items:center;justify-content:center;text-align:center}
+.panel{background:#20334d;padding:24px;border-radius:18px}
 </style>
 </head>
 <body>
+<div id="app">
 <header>
-  <div class="logo">▣ ByteNest</div>
-  <button class="primary" onclick="showPublish()">＋ Опубликовать</button>
+<div><b>🥐 БУЛОЧКА!</b><div id="world">Каменные пещеры</div></div>
+<b id="level">Уровень 1 / 500</b>
 </header>
-
-<main>
-  <h1>Открывай. Создавай. Делись.</h1>
-  <div class="muted">Твои проекты — в одном месте.</div>
-
-  <input id="search" class="search"
-    placeholder="⌕  Найти файл или проект..."
-    oninput="render()">
-
-  <div class="categories" id="categories">
-    <button class="active" onclick="setCategory('Все',this)">🔥 Все</button>
-    <button onclick="setCategory('ZIP',this)">📦 ZIP</button>
-    <button onclick="setCategory('APK',this)">📱 APK</button>
-    <button onclick="setCategory('HTML',this)">🌐 HTML</button>
-    <button onclick="setCategory('Код',this)">💻 Код</button>
-    <button onclick="setCategory('Другое',this)">📁 Другое</button>
-  </div>
-
-  <section id="publish">
-    <h2>Новая публикация</h2>
-    <form id="form">
-      <label>Название проекта</label>
-      <input id="title" required maxlength="70"
-        placeholder="Например, моя первая игра">
-      <label>Описание</label>
-      <textarea id="description" required maxlength="500"
-        placeholder="Что это за проект?"></textarea>
-      <label>Категория</label>
-      <select id="type">
-        <option>ZIP</option><option>APK</option>
-        <option>HTML</option><option>Код</option>
-        <option>Другое</option>
-      </select>
-      <label>Файл</label>
-      <input id="file" type="file" required>
-      <label>Как запустить?</label>
-      <textarea id="instructions"
-        placeholder="Например: распаковать ZIP и открыть index.html"></textarea>
-      <p class="muted">Файл пока хранится только в этой демоверсии.
-      Публикация не загружается в интернет.</p>
-      <button class="primary" type="submit">Опубликовать</button>
-      <button type="button" onclick="hidePublish()">Отмена</button>
-    </form>
-  </section>
-
-  <h2>Лента проектов</h2>
-  <div id="feed"></div>
-</main>
-
-<footer>ByteNest · Делись своими проектами</footer>
+<div id="meter"><div id="fill"></div></div>
+<div id="scene">
+<canvas id="game"></canvas>
+<div id="hint">Нарисуй лестницу пальцем!</div>
+<div id="win"><div class="panel">
+<h2 id="winTitle">Уровень пройден!</h2>
+<p id="winText">🥐</p>
+<button id="next">Следующий уровень →</button>
+</div></div>
+</div>
+<footer>
+<button class="secondary" id="reset">↻ Сброс</button>
+<div id="status">Нарисуй путь</div>
+<button class="secondary" id="erase">Очистить</button>
+</footer>
+</div>
 
 <script>
-let category = 'Все';
-let posts = [];
-try {
-  posts = JSON.parse(localStorage.getItem('bytenest-posts') || '[]');
-} catch(e) {}
+const c=document.getElementById('game');
+const ctx=c.getContext('2d');
+const scene=document.getElementById('scene');
+const $=id=>document.getElementById(id);
 
-function save(){
-  try {
-    localStorage.setItem('bytenest-posts',JSON.stringify(posts));
-  } catch(e) {
-    alert('Не удалось сохранить данные браузера.');
+let W=0,H=0,level=1,points=[];
+let drawing=false,moving=false,won=false;
+let hero={x:0,y:0};
+
+function theme(){
+ if(level<200)return ['#9bdcff','#64748b','#45566c','Каменные пещеры'];
+ if(level<300)return ['#b7e4a1','#98633b','#704326','Земля'];
+ if(level<400)return ['#bfeaff','#eaf8ff','#9dc9df','Снежные горы'];
+ return ['#9adfff','#f7fbff','#d9efff','Облака'];
+}
+
+function resize(){
+ let r=scene.getBoundingClientRect();
+ W=r.width;H=r.height;
+ c.width=W*devicePixelRatio;
+ c.height=H*devicePixelRatio;
+ ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+ reset();
+}
+
+function reset(){
+ hero={x:W/2,y:H-57};
+ points=[];moving=false;won=false;
+ $('win').style.display='none';
+ $('fill').style.width='100%';
+ $('level').textContent=`Уровень ${level} / 500`;
+ $('world').textContent=level===500?'Финал':theme()[3];
+ $('status').textContent='Нарисуй лестницу';
+}
+
+function person(x,y){
+ ctx.fillStyle='#111';
+ ctx.fillRect(x-10,y-34,20,22);
+ ctx.fillRect(x-9,y-12,8,13);
+ ctx.fillRect(x+1,y-12,8,13);
+ ctx.fillRect(x-12,y+1,9,10);
+ ctx.fillRect(x+3,y+1,9,10);
+ ctx.fillStyle='#f4f4ee';
+ ctx.fillRect(x-7,y-31,14,16);
+ ctx.fillStyle='#111';
+ ctx.fillRect(x-4,y-25,3,5);
+ ctx.fillRect(x+2,y-25,3,5);
+ ctx.fillStyle='#e6e9ee';
+ ctx.fillRect(x-6,y-10,12,10);
+ ctx.fillRect(x-13,y-9,5,13);
+ ctx.fillRect(x+8,y-9,5,13);
+}
+
+function draw(){
+ let [sky,wall,dark]=theme();
+ ctx.clearRect(0,0,W,H);
+ ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+
+ for(let y=0;y<H-34;y+=28){
+  for(let x of [0,W-38]){
+   ctx.fillStyle=wall;
+   ctx.fillRect(x,y,38,28);
+   ctx.strokeStyle=dark;
+   ctx.strokeRect(x,y,38,28);
+   ctx.fillStyle=dark;
+   ctx.fillRect(x+15,y+12,4,3);
   }
+ }
+
+ ctx.fillStyle=dark;
+ ctx.fillRect(0,H-34,W,34);
+
+ if(level===500){
+  ctx.fillStyle='#8b5a35';
+  ctx.fillRect(W*.57,H*.31,12,70);
+  ctx.fillRect(W*.43,H*.39,150,10);
+  ctx.fillStyle='#e7c99a';
+  ctx.fillRect(W*.39,H*.35,170,8);
+  ctx.fillStyle='#a66b3d';
+  ctx.fillRect(W*.49,H*.30,32,3);
+ }else{
+  ctx.font='28px serif';
+  ctx.fillText('🥐',W/2-14,42);
+ }
+
+ ctx.fillStyle=dark;
+ ctx.fillRect(W*.34,H*.55,28,7);
+ ctx.fillRect(W*.63,H*.40,28,7);
+
+ if(points.length>1){
+  ctx.lineCap='round';
+  ctx.lineJoin='round';
+  ctx.strokeStyle='white';
+  ctx.lineWidth=7;
+  ctx.beginPath();
+  ctx.moveTo(points[0].x,points[0].y);
+  for(let p of points.slice(1))ctx.lineTo(p.x,p.y);
+  ctx.stroke();
+  ctx.strokeStyle='#ffb74d';
+  ctx.lineWidth=2;
+  ctx.stroke();
+ }
+
+ ctx.fillStyle='#152033';
+ ctx.beginPath();
+ ctx.ellipse(hero.x,hero.y+12,13,4,0,0,Math.PI*2);
+ ctx.fill();
+ person(hero.x,hero.y);
+ requestAnimationFrame(draw);
 }
 
-function showPublish(){
-  document.getElementById('publish').style.display='block';
-  document.getElementById('publish').scrollIntoView({behavior:'smooth'});
-}
-function hidePublish(){
-  document.getElementById('publish').style.display='none';
-}
-function setCategory(value,button){
-  category=value;
-  document.querySelectorAll('.categories button')
-    .forEach(b=>b.classList.remove('active'));
-  button.classList.add('active');
-  render();
+function startMove(){
+ if(points.length<2)return;
+ moving=true;
+ $('status').textContent='Персонаж идёт!';
 }
 
-document.getElementById('form').addEventListener('submit',e=>{
-  e.preventDefault();
-  const file=document.getElementById('file').files[0];
-  if(!file)return;
-  if(file.size>10*1024*1024){
-    alert('В демоверсии разрешены файлы до 10 МБ.');
-    return;
+function update(){
+ if(moving&&!won){
+  let target=points[0];
+  let dx=target.x-hero.x;
+  let dy=target.y-(hero.y-12);
+  let d=Math.hypot(dx,dy);
+
+  if(d>3){
+   hero.x+=dx/d*1.5;
+   hero.y+=dy/d*1.5;
+  }else{
+   points.shift();
+   if(!points.length){
+    if(hero.y<100||hero.x>W*.42)win();
+    else{
+     moving=false;
+     $('status').textContent='Нарисуй ещё!';
+    }
+   }
   }
-  posts.unshift({
-    id:Date.now(),
-    title:document.getElementById('title').value.trim(),
-    description:document.getElementById('description').value.trim(),
-    type:document.getElementById('type').value,
-    filename:file.name,
-    size:file.size,
-    instructions:document.getElementById('instructions').value,
-    likes:0,
-    comments:[],
-    localFile:true,
-    safety:'Не проверен'
-  });
-  save();
-  e.target.reset();
-  hidePublish();
-  render();
+
+  if(hero.x<43||hero.x>W-43||hero.y>H-40){
+   moving=false;points=[];
+   $('status').textContent='Попробуй ещё раз!';
+  }
+ }
+ requestAnimationFrame(update);
+}
+
+function win(){
+ won=true;moving=false;
+ $('win').style.display='flex';
+ if(level===500){
+  $('winTitle').textContent='Булочку уже съели!';
+  $('winText').textContent='На тарелке остались только крошки 😂';
+ }else{
+  $('winTitle').textContent='Уровень пройден!';
+  $('winText').textContent='Ты добрался до булочки 🥐';
+ }
+}
+
+function pos(e){
+ let r=c.getBoundingClientRect();
+ return{x:e.clientX-r.left,y:e.clientY-r.top};
+}
+
+c.addEventListener('pointerdown',e=>{
+ if(won||moving)return;
+ drawing=true;points=[pos(e)];
+ c.setPointerCapture(e.pointerId);
 });
 
-function render(){
-  const q=document.getElementById('search').value.toLowerCase();
-  const feed=document.getElementById('feed');
-  const shown=posts.filter(p=>
-    (category==='Все'||p.type===category)&&
-    (p.title+' '+p.description+' '+p.filename)
-      .toLowerCase().includes(q)
-  );
-  feed.innerHTML='';
-  if(!shown.length){
-    feed.innerHTML='<div class="post"><h3>Пока пусто 👀</h3>'+
-      '<p class="muted">Опубликуй первый проект или измени поиск.</p></div>';
-    return;
-  }
-  shown.forEach(p=>{
-    const el=document.createElement('article');
-    el.className='post';
-    const icons={ZIP:'📦',APK:'📱',HTML:'🌐',Код:'💻',Другое:'📁'};
-    const top=document.createElement('div');
-    top.className='posttop';
-    const ico=document.createElement('div');
-    ico.className='fileicon';
-    ico.textContent=icons[p.type]||'📁';
-    const info=document.createElement('div');
-    const h=document.createElement('h3');
-    h.textContent=p.title;
-    const meta=document.createElement('div');
-    meta.className='muted';
-    meta.textContent=p.filename+' · '+(p.size/1024/1024).toFixed(2)+' МБ';
-    info.append(h,meta);
-    top.append(ico,info);
-    const desc=document.createElement('p');
-    desc.textContent=p.description;
-    const tag=document.createElement('span');
-    tag.className='tag';
-    tag.textContent='⚪ '+p.safety;
-    const actions=document.createElement('div');
-    actions.className='actions';
-    const like=document.createElement('button');
-    like.textContent='❤️ '+p.likes;
-    like.onclick=()=>{
-      p.likes++;
-      save();
-      render();
-    };
-    const comment=document.createElement('button');
-    comment.textContent='💬 '+p.comments.length;
-    comment.onclick=()=>{
-      const value=prompt('Напиши комментарий:');
-      if(value&&value.trim()){
-        p.comments.push(value.trim());
-        save();
-        render();
-      }
-    };
-    const details=document.createElement('button');
-    details.textContent='Инструкция';
-    details.onclick=()=>alert(p.instructions||'Автор не добавил инструкцию.');
-    actions.append(like,comment,details);
-    el.append(top,desc,tag,actions);
-    feed.append(el);
-  });
-}
-render();
+c.addEventListener('pointermove',e=>{
+ if(!drawing)return;
+ let p=pos(e);
+ let last=points[points.length-1];
+ if(Math.hypot(p.x-last.x,p.y-last.y)>5)points.push(p);
+});
+
+c.addEventListener('pointerup',()=>{
+ if(!drawing)return;
+ drawing=false;
+ startMove();
+});
+
+$('reset').onclick=reset;
+$('erase').onclick=()=>{
+ points=[];moving=false;
+ $('status').textContent='Лестница очищена';
+};
+
+$('next').onclick=()=>{
+ level=level===500?1:level+1;
+ reset();
+};
+
+window.addEventListener('resize',resize);
+resize();
+draw();
+requestAnimationFrame(update);
 </script>
 </body>
 </html>
