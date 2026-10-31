@@ -1,1823 +1,215 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#1d6bff">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="screen-orientation" content="portrait">
-<title>BunUp — 500 LEVELS. ONE BUN.</title>
-<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAC90lEQVR4Xu3dsa3UQBRAURaRUgIRBUAEJVAM9VAMJfyMBogogQIWESL9CWavrRl/zsl311pdveBpbN/efb2/gke9fvSD8JeASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkb9KnN/br222rq3up99+ZQCQCIhEQiYBIBEQiIBIBkVxmDzS713n68fxzjz59SP/Xw263ub3UVfZGJhCJgEgERCIgEgGRCIhEQCTb7YFG+57RXmdk1b5n5H6fex73aG+0237IBCIREImASAREIiASAZEIiGS7PdCs3fY9/xsTiERAJAIiERCJgEgERCIgkmV7oKPO/bxUo/NDu50TMoFIBEQiIBIBkQiIREAkAiJZtgeatdu5n9E+5qj7v2a/ZxUTiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIJLLnAfazVHndY76nlVMIBIBkQiIREAkAiIREImASJbtgUbvvfr88fn3q+/2Hviz7fYcoBETiERAJAIiERCJgEgERCIgkmV7oJHZ/dDIbudsRnud2f9hNyYQiYBIBEQiIBIBkQiIREAkt9He5SpG7x0bOXs/9FL3PSMmEImASAREIiASAZEIiERAJNudBxoZ7XvO3uvMmr2eq9z/NWICkQiIREAkAiIREImASAREst0e6Kh9z1HvdZ81+7ujvdFV9kMmEImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCTbnQcaPa9ot3M2Z59buspzm0wgEgGRCIhEQCQCIhEQiYBIttsDzZp9LvPZdrues5lAJAIiERCJgEgERCIgEgGRLHtf2O+f39OF86+3778s+UtMIBIBkQiIREAkAiIREImASJadB1q1t+BYJhCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCR/ALYqavmhh3ZRAAAAAElFTkSuQmCC">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Шахматы: Эра</title>
 <style>
-:root {
-  --blue: #1d6bff;
-  --blue-d: #1048b8;
-  --ink: #0b1a3d;
-  --white: #ffffff;
-  --green: #35c759;
-  --green-d: #1c8a37;
-  --orange: #ff9a2e;
-  --orange-d: #b86412;
-  --red: #ff5a5a;
-  --font: "Courier New", Courier, ui-monospace, monospace;
+body {
+  background:#172235;
+  color:white;
+  font-family:Arial;
+  text-align:center;
 }
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
-html, body { margin: 0; height: 100%; background: var(--blue); color: var(--white); font-family: var(--font); font-weight: 700; overflow: hidden; overscroll-behavior: none; }
-#app { position: fixed; inset: 0; background:
-  repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0 4px, transparent 4px 8px), var(--blue); }
-.screen { position: absolute; inset: 0; display: none; flex-direction: column; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
-.screen.on { display: flex; }
-canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
-.logo { image-rendering: pixelated; }
-
-/* ---------- buttons ---------- */
-.btn { display: block; width: 100%; font: inherit; font-size: 18px; text-align: center; text-decoration: none; color: var(--ink);
-  background: #fff; border: 4px solid #000; padding: 12px 10px; margin: 0; cursor: pointer; letter-spacing: .5px;
-  box-shadow: 0 6px 0 #000, inset 0 -6px 0 rgba(0,0,0,.12); transform: translateY(0); transition: transform .05s, box-shadow .05s; }
-.btn:active { transform: translateY(5px); box-shadow: 0 1px 0 #000, inset 0 -6px 0 rgba(0,0,0,.12); }
-.btn.big { font-size: 26px; padding: 14px 10px; }
-.btn small { display: block; font-size: 12px; opacity: .75; margin-top: 2px; letter-spacing: 0; }
-.btn.green { background: var(--green); color: #fff; text-shadow: 2px 2px 0 var(--green-d); }
-.btn.orange { background: var(--orange); color: #fff; text-shadow: 2px 2px 0 var(--orange-d); }
-.btn.tg { background: #2aabee; color: #fff; text-shadow: 2px 2px 0 #1a76a6; }
-.btn.danger { background: #ffd7d7; color: #8a1d1d; }
-.btn.sm { font-size: 15px; padding: 10px 6px; }
-.btn.go { font-size: 24px; background: var(--green); color: #fff; text-shadow: 2px 2px 0 var(--green-d); padding: 12px 6px; }
-.btn.go.again { background: var(--orange); text-shadow: 2px 2px 0 var(--orange-d); }
-.btn[disabled] { opacity: .45; }
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.hbtn { font: inherit; font-size: 24px; width: 46px; height: 42px; color: var(--ink); background: #fff; border: 4px solid #000; box-shadow: 0 4px 0 #000; padding: 0; line-height: 1; cursor: pointer; }
-.hbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 #000; }
-
-/* ---------- menu ---------- */
-.menu-top { text-align: center; padding-top: 4vh; }
-.logo { width: min(86vw, 420px); height: auto; filter: drop-shadow(0 6px 0 rgba(0,0,0,.25)); }
-.slogan { font-size: 15px; letter-spacing: 2px; margin-top: 6px; text-shadow: 2px 2px 0 var(--blue-d); }
-.slogan.sm { font-size: 12px; margin: 2px 0 6px; color: var(--ink); text-shadow: none; }
-#menuScene { width: min(92vw, 460px); height: auto; aspect-ratio: 180 / 84; align-self: center; margin: 2vh 0 1vh; border: 4px solid #000; background: #000; }
-.menu-btns { margin-top: auto; padding: 8px 22px calc(18px + env(safe-area-inset-bottom)); display: grid; gap: 14px; width: min(100%, 460px); align-self: center; }
-
-/* ---------- top bar ---------- */
-.topbar { display: flex; align-items: center; gap: 10px; padding: 12px 14px 8px; }
-.topbar h2 { flex: 1; margin: 0; font-size: 20px; text-shadow: 2px 2px 0 var(--blue-d); }
-.count { font-size: 14px; min-width: 70px; text-align: right; }
-
-/* ---------- levels ---------- */
-.tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 4px 12px; }
-.tab { font: inherit; font-size: 11px; color: var(--ink); background: #bcd2ff; border: 3px solid #000; padding: 8px 2px; cursor: pointer; line-height: 1.15; }
-.tab b { display: block; font-size: 15px; }
-.tab.on { background: #fff; box-shadow: 0 3px 0 #000; transform: translateY(-2px); }
-.wname { text-align: center; font-size: 14px; padding: 8px 0 4px; text-shadow: 2px 2px 0 var(--blue-d); }
-.grid-wrap { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 4px 12px 18px; }
-.grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-.lv { font: inherit; font-size: 16px; aspect-ratio: 1; color: var(--ink); background: #fff; border: 3px solid #000; box-shadow: 0 3px 0 #000; padding: 0; cursor: pointer; position: relative; }
-.lv:active { transform: translateY(2px); box-shadow: 0 1px 0 #000; }
-.lv.done { background: #aef0bd; }
-.lv.done::after { content: "\2713"; position: absolute; right: 3px; top: 0; font-size: 12px; color: #136b2b; }
-.lv.cur { background: #ffd54a; animation: pulse 1s steps(2) infinite; }
-.lv.lock { background: #5d86d9; color: #2a4a94; box-shadow: none; cursor: default; }
-@keyframes pulse { 50% { background: #fff0a8; } }
-
-/* ---------- game ---------- */
-.hud { display: flex; align-items: center; gap: 10px; padding: 8px 10px 6px; }
-.lvl { display: flex; flex-direction: column; line-height: 1.1; min-width: 92px; }
-.lvl b { font-size: 17px; text-shadow: 2px 2px 0 var(--blue-d); }
-.lvl span { font-size: 10px; opacity: .85; }
-.ink { flex: 1; display: flex; align-items: center; gap: 8px; }
-.inkbar { flex: 1; height: 22px; border: 4px solid #000; background: #0a2260; position: relative; overflow: hidden; }
-.inkbar i { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; background: repeating-linear-gradient(90deg, #ffe066 0 6px, #ffc533 6px 12px); transition: width .06s linear; }
-.inkbar.low i { background: repeating-linear-gradient(90deg, #ff7a7a 0 6px, #ff4a4a 6px 12px); }
-.ink b { width: 48px; text-align: right; font-size: 16px; }
-#stage { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; min-height: 0; overflow: hidden; }
-#cv { border: 4px solid #000; background: #000; touch-action: none; display: block; }
-#hint { position: absolute; left: 50%; top: 14px; transform: translateX(-50%); width: min(86%, 380px); text-align: center; font-size: 13px; color: #fff;
-  background: rgba(0,0,0,.65); border: 3px solid #000; padding: 6px 8px; pointer-events: none; transition: opacity .3s; }
-#hint.off { opacity: 0; }
-.bar { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 12px; padding: 10px 12px calc(12px + env(safe-area-inset-bottom)); }
-
-/* ---------- overlays ---------- */
-.ov { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(5,15,50,.55); padding: 16px; z-index: 5; }
-.ov.on { display: flex; }
-.card { width: min(100%, 340px); background: #fff; color: var(--ink); border: 4px solid #000; box-shadow: 0 8px 0 #000; padding: 16px 16px 18px; display: grid; gap: 12px; text-align: center; animation: pop .25s steps(4); }
-.card h3 { margin: 0; font-size: 24px; }
-.card p { margin: 0; font-size: 14px; line-height: 1.35; }
-.stars { font-size: 30px; color: #ffb400; text-shadow: 2px 2px 0 #000; letter-spacing: 4px; }
-.card.final h3 { font-size: 30px; line-height: 1.1; color: #e8590c; text-shadow: 3px 3px 0 #000; animation: wob 1s steps(2) infinite; }
-@keyframes pop { from { transform: scale(.6); } to { transform: scale(1); } }
-@keyframes wob { 50% { transform: translateY(-4px) rotate(-1.5deg); } }
-
-/* ---------- panels ---------- */
-.panel { padding: 14px 20px 24px; display: grid; gap: 16px; align-content: start; width: min(100%, 460px); align-self: center; }
-.panel.scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; justify-items: center; text-align: center; }
-.panel p { margin: 0; font-size: 14px; line-height: 1.45; text-align: left; }
-.panel.scroll .slogan { margin-top: 0; }
-.panel .btn { max-width: 100%; }
-.muted { opacity: .8; font-size: 12px !important; text-align: center !important; }
-.toggle b { color: var(--green-d); }
-.toggle.off b { color: #b3261e; }
-
+h2 {color:#8db9ff}
+#board {
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  width:min(94vw,480px);
+  aspect-ratio:1;
+  margin:auto;
+}
+.cell {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:clamp(23px,8vw,43px);
+  border:0;
+  padding:0;
+}
+.light {background:#eee2c9}
+.dark {background:#77936f}
+.selected {outline:4px solid gold;outline-offset:-4px}
+button {cursor:pointer}
+#info {margin:15px}
 </style>
 </head>
 <body>
-<div id="app">
 
-  <!-- MAIN MENU -->
-  <section id="scr-menu" class="screen on">
-    <div class="menu-top">
-      <canvas id="menuLogo" class="logo" aria-label="BunUp"></canvas>
-      <div class="slogan">500 LEVELS. ONE BUN.</div>
-    </div>
-    <canvas id="menuScene" width="180" height="84"></canvas>
-    <div class="menu-btns">
-      <button class="btn big green" id="mPlay">Играть<small id="mPlaySub">Уровень 1</small></button>
-      <button class="btn" id="mLevels">Выбор уровня</button>
-      <div class="row2">
-        <button class="btn" id="mSettings">Настройки</button>
-        <button class="btn" id="mAbout">О проекте</button>
-      </div>
-      <a class="btn tg" href="https://t.me/bunupcom" target="_blank" rel="noopener">Наш Telegram</a>
-    </div>
-  </section>
-
-  <!-- LEVEL SELECT -->
-  <section id="scr-levels" class="screen">
-    <header class="topbar">
-      <button class="hbtn" data-go="scr-menu" aria-label="Назад">&#8592;</button>
-      <h2>Выбор уровня</h2>
-      <span class="count" id="lvCount">0/500</span>
-    </header>
-    <div class="tabs" id="lvTabs"></div>
-    <div class="wname" id="lvWorldName"></div>
-    <div class="grid-wrap"><div class="grid" id="lvGrid"></div></div>
-  </section>
-
-  <!-- GAME -->
-  <section id="scr-game" class="screen">
-    <header class="hud">
-      <button class="hbtn" id="gBack" aria-label="К уровням">&#8592;</button>
-      <div class="lvl"><b id="gLevel">Уровень 1</b><span id="gWorld">Камни и пещеры</span></div>
-      <div class="ink">
-        <div class="inkbar"><i id="inkFill"></i></div>
-        <b id="inkPct">100%</b>
-      </div>
-    </header>
-    <div id="stage">
-      <canvas id="cv" width="180" height="300"></canvas>
-      <div id="hint">Нарисуй пальцем путь к булочке, потом нажми СТАРТ</div>
-
-      <div class="ov" id="ovWin">
-        <div class="card">
-          <h3 id="winTitle">Уровень пройден!</h3>
-          <div class="stars">&#9733; &#9733; &#9733;</div>
-          <button class="btn big green" id="winNext">Дальше</button>
-          <div class="row2">
-            <button class="btn" id="winAgain">Заново</button>
-            <button class="btn" id="winMenu">Уровни</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="ov" id="ovLose">
-        <div class="card">
-          <h3>Не получилось</h3>
-          <p id="loseWhy">Попробуй другой путь</p>
-          <button class="btn big orange" id="loseAgain">Ещё раз</button>
-          <button class="btn" id="loseMenu">Уровни</button>
-        </div>
-      </div>
-
-      <div class="ov" id="ovFinal">
-        <div class="card final">
-          <h3 id="finalBig">Булочку уже съели!</h3>
-          <p>Ты прошёл все 500 уровней BunUp.<br>Булочки больше нет, но путь был вкусным.</p>
-          <div class="slogan sm">500 LEVELS. ONE BUN.</div>
-          <a class="btn tg" href="https://t.me/bunupcom" target="_blank" rel="noopener">Наш Telegram</a>
-          <div class="row2">
-            <button class="btn" id="finMenu">В меню</button>
-            <button class="btn" id="finStart">С первого</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <footer class="bar">
-      <button class="btn sm" id="bUndo">Отмена</button>
-      <button class="btn go" id="bGo">СТАРТ</button>
-      <button class="btn sm" id="bClear">Стереть</button>
-    </footer>
-  </section>
-
-  <!-- SETTINGS -->
-  <section id="scr-settings" class="screen">
-    <header class="topbar">
-      <button class="hbtn" data-go="scr-menu" aria-label="Назад">&#8592;</button>
-      <h2>Настройки</h2><span class="count"></span>
-    </header>
-    <div class="panel">
-      <button class="btn toggle" id="setSfx">Звуки: <b>вкл</b></button>
-      <button class="btn toggle" id="setMusic">Музыка: <b>вкл</b></button>
-      <button class="btn danger" id="setReset">Сбросить прогресс</button>
-      <a class="btn tg" href="https://t.me/bunupcom" target="_blank" rel="noopener">Наш Telegram</a>
-      <p class="muted">BunUp — 500 LEVELS. ONE BUN.<br>Работает без интернета. Прогресс хранится на этом устройстве.</p>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="scr-about" class="screen">
-    <header class="topbar">
-      <button class="hbtn" data-go="scr-menu" aria-label="Назад">&#8592;</button>
-      <h2>О проекте</h2><span class="count"></span>
-    </header>
-    <div class="panel scroll">
-      <canvas id="aboutLogo" class="logo"></canvas>
-      <div class="slogan">500 LEVELS. ONE BUN.</div>
-      <p>Маленький белый человечек хочет добраться до булочки. Ты рисуешь пальцем лестницы, мосты, склоны и зигзаги, а физика делает всё остальное.</p>
-      <p><b>Как играть</b><br>1. Нарисуй путь от человечка к булочке.<br>2. Следи за шкалой рисования: чем длиннее линия, тем меньше остаётся.<br>3. Нажми СТАРТ. Человечек пойдёт сам. Рисовать можно и во время прогулки.<br>4. Шипы и пропасти опасны. После уровня все линии исчезают.</p>
-      <p>5 миров, 500 уровней: пещеры, земля, снежные горы, облака и финал.</p>
-      <a class="btn tg" href="https://t.me/bunupcom" target="_blank" rel="noopener">Наш Telegram</a>
-      <p class="muted">t.me/bunupcom</p>
-    </div>
-  </section>
-
-</div>
+<h2>♟ ШАХМАТЫ: ЭРА</h2>
+<div id="info">Твой ход — белые</div>
+<div id="board"></div>
+<button onclick="reset()">Новая партия</button>
 
 <script>
-/*
- * BunUp — physics core.
- * Small rigid-body engine written for this game (no external libraries):
- *   - dynamic circles (hero, rolling rocks) with gravity, restitution, Coulomb friction, rotation
- *   - static thick segments ("capsules") used for terrain and for every line the player draws
- *   - sub-stepping so fast bodies never tunnel through thin lines
- * It has no DOM dependencies, so the very same code runs in the game and in the Node level verifier.
- */
-(function (root) {
-  'use strict';
-
-  var GRAVITY = 1500;      // px / s^2
-  var SUBSTEPS = 4;
-  var FLOOR_NY = 0.60;     // surface counts as floor when its normal.y <= -FLOOR_NY (slope <= ~53 deg)
-  var CRASH_SPEED = 1000;  // impact speed (px/s) that is lethal for the hero
-
-  function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
-
-  function World() {
-    this.circles = [];
-    this.segs = [];
-    this.hazards = [];     // rects {x,y,w,h}
-    this.goal = null;      // {x,y,r}
-    this.time = 0;
-    this.hero = null;
-    this.height = 600;
-    this.width = 360;
-    this.gravity = GRAVITY;
-    this.status = 'run';   // run | win | dead
-    this.reason = '';
-    this.events = [];      // 'land', 'flip', ...
-  }
-
-  World.prototype.addSeg = function (x1, y1, x2, y2, r, mu) {
-    var s = {
-      x1: x1, y1: y1, x2: x2, y2: y2, r: r, mu: mu == null ? 0.9 : mu,
-      minx: Math.min(x1, x2) - r, maxx: Math.max(x1, x2) + r,
-      miny: Math.min(y1, y2) - r, maxy: Math.max(y1, y2) + r
-    };
-    this.segs.push(s);
-    return s;
-  };
-
-  World.prototype.removeSegs = function (list) {
-    var dead = {}, i;
-    for (i = 0; i < list.length; i++) dead[this.segs.indexOf(list[i])] = true;
-    var keep = [];
-    for (i = 0; i < this.segs.length; i++) if (!dead[i]) keep.push(this.segs[i]);
-    this.segs = keep;
-  };
-
-  World.prototype.addHero = function (x, y, dir) {
-    var h = this._circle(x, y, 12, 1, 0, 0.95, 0.0);
-    h.kind = 'hero';
-    h.dir = dir || 1;
-    h.driven = false;
-    h.speed = 100;
-    h.lastFlip = -9;
-    h.air = 0;
-    this.hero = h;
-    return h;
-  };
-
-  World.prototype.addRock = function (x, y, r) {
-    var mass = r * r / 120;
-    var c = this._circle(x, y, r, 1 / mass, 1 / (0.5 * mass * r * r), 0.55, 0.12);
-    c.kind = 'rock';
-    return c;
-  };
-
-  World.prototype._circle = function (x, y, r, im, iI, mu, e) {
-    var c = {
-      x: x, y: y, vx: 0, vy: 0, r: r, im: im, iI: iI, w: 0, ang: 0, mu: mu, e: e,
-      ground: false, gnx: 0, gny: -1, wall: 0, maxImpact: 0, kind: 'rock'
-    };
-    this.circles.push(c);
-    return c;
-  };
-
-  /* circle vs thick segment */
-  function circleSeg(c, s) {
-    if (c.x + c.r < s.minx || c.x - c.r > s.maxx || c.y + c.r < s.miny || c.y - c.r > s.maxy) return;
-    var dx = s.x2 - s.x1, dy = s.y2 - s.y1;
-    var l2 = dx * dx + dy * dy;
-    var t = l2 > 0 ? ((c.x - s.x1) * dx + (c.y - s.y1) * dy) / l2 : 0;
-    t = clamp(t, 0, 1);
-    var px = s.x1 + dx * t, py = s.y1 + dy * t;
-    var ex = c.x - px, ey = c.y - py;
-    var rr = c.r + s.r;
-    var d2 = ex * ex + ey * ey;
-    if (d2 >= rr * rr) return;
-    var d = Math.sqrt(d2), nx, ny;
-    if (d > 1e-6) { nx = ex / d; ny = ey / d; }
-    else {
-      var L = Math.sqrt(l2) || 1;
-      nx = dy / L; ny = -dx / L; d = 0;
-    }
-    var pen = rr - d;
-    c.x += nx * pen; c.y += ny * pen;
-
-    var rcx = -nx * c.r, rcy = -ny * c.r;
-    var vcx = c.vx - c.w * rcy, vcy = c.vy + c.w * rcx;
-    var vn = vcx * nx + vcy * ny;
-    if (vn < 0) {
-      var e = (vn < -300) ? c.e : 0;
-      var rn = rcx * ny - rcy * nx;
-      var kn = c.im + c.iI * rn * rn;
-      var jn = -(1 + e) * vn / kn;
-      c.vx += jn * nx * c.im; c.vy += jn * ny * c.im;
-      c.w += c.iI * (rcx * (jn * ny) - rcy * (jn * nx));
-      if (-vn > c.maxImpact) c.maxImpact = -vn;
-      // friction
-      var tx = -ny, ty = nx;
-      vcx = c.vx - c.w * rcy; vcy = c.vy + c.w * rcx;
-      var vt = vcx * tx + vcy * ty;
-      var rt = rcx * ty - rcy * tx;
-      var kt = c.im + c.iI * rt * rt;
-      var jt = -vt / kt;
-      var maxj = Math.sqrt(c.mu * s.mu) * jn;
-      jt = clamp(jt, -maxj, maxj);
-      c.vx += jt * tx * c.im; c.vy += jt * ty * c.im;
-      c.w += c.iI * (rcx * (jt * ty) - rcy * (jt * tx));
-    }
-    if (ny < -FLOOR_NY) {
-      if (!c.ground || ny < c.gny) { c.gnx = nx; c.gny = ny; }
-      c.ground = true;
-    } else if (ny > -0.55 && Math.abs(nx) > 0.5) {
-      c.wall = nx;
-    }
-  }
-
-  /* circle vs circle (hero vs rock, rock vs rock) */
-  function circleCircle(a, b) {
-    var dx = a.x - b.x, dy = a.y - b.y;
-    var rr = a.r + b.r;
-    var d2 = dx * dx + dy * dy;
-    if (d2 >= rr * rr) return;
-    var d = Math.sqrt(d2), nx, ny;
-    if (d > 1e-6) { nx = dx / d; ny = dy / d; } else { nx = 0; ny = -1; d = 0; }
-    var pen = rr - d;
-    var im = a.im + b.im;
-    if (im <= 0) return;
-    a.x += nx * pen * a.im / im; a.y += ny * pen * a.im / im;
-    b.x -= nx * pen * b.im / im; b.y -= ny * pen * b.im / im;
-    var rax = -nx * a.r, ray = -ny * a.r, rbx = nx * b.r, rby = ny * b.r;
-    var vax = a.vx - a.w * ray, vay = a.vy + a.w * rax;
-    var vbx = b.vx - b.w * rby, vby = b.vy + b.w * rbx;
-    var rvx = vax - vbx, rvy = vay - vby;
-    var vn = rvx * nx + rvy * ny;
-    if (vn < 0) {
-      var e = Math.min(a.e, b.e);
-      var rna = rax * ny - ray * nx, rnb = rbx * ny - rby * nx;
-      var kn = im + a.iI * rna * rna + b.iI * rnb * rnb;
-      var jn = -(1 + (vn < -300 ? e : 0)) * vn / kn;
-      a.vx += jn * nx * a.im; a.vy += jn * ny * a.im; a.w += a.iI * (rax * jn * ny - ray * jn * nx);
-      b.vx -= jn * nx * b.im; b.vy -= jn * ny * b.im; b.w -= b.iI * (rbx * jn * ny - rby * jn * nx);
-      var tx = -ny, ty = nx;
-      vax = a.vx - a.w * ray; vay = a.vy + a.w * rax;
-      vbx = b.vx - b.w * rby; vby = b.vy + b.w * rbx;
-      var vt = (vax - vbx) * tx + (vay - vby) * ty;
-      var rta = rax * ty - ray * tx, rtb = rbx * ty - rby * tx;
-      var kt = im + a.iI * rta * rta + b.iI * rtb * rtb;
-      var jt = clamp(-vt / kt, -0.5 * jn, 0.5 * jn);
-      a.vx += jt * tx * a.im; a.vy += jt * ty * a.im; a.w += a.iI * (rax * jt * ty - ray * jt * tx);
-      b.vx -= jt * tx * b.im; b.vy -= jt * ty * b.im; b.w -= b.iI * (rbx * jt * ty - rby * jt * tx);
-    }
-  }
-
-  World.prototype._sub = function (h) {
-    var i, j, c, k, s;
-    var cs = this.circles;
-    for (i = 0; i < cs.length; i++) {
-      c = cs[i];
-      c.vy += this.gravity * h;
-      c.x += c.vx * h; c.y += c.vy * h; c.ang += c.w * h;
-      c.ground = false; c.wall = 0;
-    }
-    for (k = 0; k < 2; k++) {
-      for (i = 0; i < cs.length; i++) {
-        for (j = i + 1; j < cs.length; j++) circleCircle(cs[i], cs[j]);
-        for (j = 0; j < this.segs.length; j++) circleSeg(cs[i], this.segs[j]);
-      }
-    }
-    var hero = this.hero;
-    if (hero && hero.driven && this.status === 'run') {
-      if (hero.ground) {
-        hero.air = 0;
-        if (hero.gny <= -FLOOR_NY) {
-          var tx = -hero.gny, ty = hero.gnx;           // tangent along the floor
-          if (tx * hero.dir < 0) { tx = -tx; ty = -ty; }
-          hero.vx = tx * hero.speed;
-          hero.vy = ty * hero.speed;
-        }
-      } else {
-        hero.air += h;
-      }
-      if (hero.wall !== 0 && hero.wall * hero.dir < -0.45 && this.time - hero.lastFlip > 0.25) {
-        hero.dir = -hero.dir;
-        hero.lastFlip = this.time;
-        this.events.push('flip');
-      }
-    }
-  };
-
-  World.prototype.step = function (dt) {
-    if (this.gravity == null) this.gravity = GRAVITY;
-    var h = dt / SUBSTEPS;
-    for (var n = 0; n < SUBSTEPS; n++) {
-      this.time += h;
-      this._sub(h);
-    }
-    this._rules();
-    return this.status;
-  };
-
-  World.prototype._rules = function () {
-    if (this.status !== 'run') return;
-    var hero = this.hero;
-    if (!hero) return;
-    var i, hz, cx, cy, dx, dy;
-
-    if (hero.maxImpact > CRASH_SPEED) { this._die('crash'); return; }
-    hero.maxImpact = 0;
-    for (i = 0; i < this.circles.length; i++) this.circles[i].maxImpact = 0;
-
-    if (hero.y > this.height - 12) { this._die('fall'); return; }
-    if (hero.x < -60 || hero.x > this.width + 60) { this._die('fall'); return; }
-
-    for (i = 0; i < this.hazards.length; i++) {
-      hz = this.hazards[i];
-      cx = clamp(hero.x, hz.x, hz.x + hz.w);
-      cy = clamp(hero.y, hz.y, hz.y + hz.h);
-      dx = hero.x - cx; dy = hero.y - cy;
-      if (dx * dx + dy * dy < (hero.r - 3) * (hero.r - 3)) { this._die('spikes'); return; }
-    }
-    if (this.goal) {
-      dx = hero.x - this.goal.x; dy = hero.y - this.goal.y;
-      var rr = this.goal.r + hero.r - 2;
-      if (dx * dx + dy * dy < rr * rr) {
-        this.status = 'win';
-        hero.driven = false;
-        hero.vx = 0;
-      }
-    }
-    // rocks that left the world simply disappear
-    for (i = this.circles.length - 1; i >= 0; i--) {
-      var c = this.circles[i];
-      if (c.kind === 'rock' && c.y > this.height + 200) this.circles.splice(i, 1);
-    }
-  };
-
-  World.prototype._die = function (why) {
-    this.status = 'dead';
-    this.reason = why;
-    if (this.hero) { this.hero.driven = false; }
-  };
-
-  root.BunUpPhysics = { World: World, GRAVITY: GRAVITY, CRASH_SPEED: CRASH_SPEED };
-  if (typeof module !== 'undefined' && module.exports) module.exports = root.BunUpPhysics;
-})(typeof self !== 'undefined' ? self : globalThis);
-
-</script>
-<script>
-/*
- * BunUp — level generator.
- * 500 levels are produced deterministically from the level number. Every level has:
- *   - a chain of rock/earth/snow/cloud plateaus with cliffs, pits, spikes and (later) rolling rocks
- *   - a reference solution (strokes) that is simulated offline by tools/verify.js
- *   - an ink budget derived from the reference solution
- * `attempt` selects a progressively simpler variant; tools/verify.js stores the first variant
- * whose reference solution really completes the level in the physics engine (js/verified.js).
- */
-(function (root) {
-  'use strict';
-
-  var Physics = root.BunUpPhysics || (typeof require !== 'undefined' ? require('./physics.js') : null);
-
-  var W = 360, H = 600, GY = 540;
-  var TOTAL = 500;
-  var CAP_R = 6;          // terrain capsule radius
-  var LINE_R = 3.5;       // radius of lines drawn by the player
-  var MAX_ATTEMPT = 5;
-
-  function rng(seed) {
-    var a = seed >>> 0;
-    return function () {
-      a = (a + 0x6D2B79F5) >>> 0;
-      var t = a;
-      t = Math.imul(t ^ (t >>> 15), t | 1);
-      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-  function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  function worldOf(L) {
-    if (L >= 500) return 4;
-    if (L >= 400) return 3;
-    if (L >= 300) return 2;
-    if (L >= 200) return 1;
-    return 0;
-  }
-
-  function polyLen(pts) {
-    var s = 0;
-    for (var i = 1; i < pts.length; i++) s += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
-    return s;
-  }
-
-  /* One generation attempt. Returns null when the random layout did not fit on the screen. */
-  function layout(L, attempt, rnd, relax) {
-    relax = relax || 0;
-    var t = (L - 1) / (TOTAL - 1);
-    var n = clamp(Math.round(2 + t * 2.2 + rnd() * 1.4 - 0.2), 2, 5);
-    var R = Math.min(lerp(100, 250, t) * (0.8 + 0.3 * rnd()), 270) * Math.pow(0.78, relax);
-    n = Math.max(2, n - relax);
-    var wantRockLay = attempt === 0 && t > 0.2 && rnd() < 0.5;
-    var allowGap = t > 0.04 && attempt < 4;
-    var allowDrop = t > 0.14 && attempt < 4 && n >= 3;
-    var allowSpikes = t > 0.08 && attempt < 3;
-
-    var steps = [], i;
-    var dropIdx = allowDrop && rnd() < 0.35 ? 1 + Math.floor(rnd() * (n - 2)) : -1;
-    var dropSum = 0;
-    for (i = 0; i < n - 1; i++) {
-      var gap = (allowGap && rnd() < 0.22 + 0.35 * t) ? 36 + rnd() * 44 : 0;
-      var isDrop = (i === dropIdx);
-      var d = isDrop ? -(24 + rnd() * 34) : 0;
-      if (isDrop) dropSum += -d;
-      steps.push({ gap: gap, dz: d, drop: isDrop, w: 0.6 + rnd() * 0.8 });
-    }
-    var upCount = 0, wsum = 0;
-    for (i = 0; i < steps.length; i++) if (!steps[i].drop) { upCount++; wsum += steps[i].w; }
-    if (upCount === 0) return null;
-    var Rup = R + dropSum;
-    for (i = 0; i < steps.length; i++) {
-      if (!steps[i].drop) {
-        steps[i].dz = Rup * steps[i].w / wsum;
-        if (steps[i].dz < 28 || steps[i].dz > 140) return null;
-      }
-    }
-
-    // geometry
-    var plat = [];            // {a,b,y}
-    var a = 0, y = GY;
-    var ramps = [];
-    var info = [];
-    for (i = 0; i < n; i++) {
-      var st = steps[i];
-      var b, m = 0, th = 0, run = 0, hasRamp = false;
-      if (i < n - 1) {
-        if (st.dz > 0) {
-          th = (28 + 8 * t + rnd() * 14) * Math.PI / 180;
-          run = st.dz / Math.tan(th);
-          m = run - st.gap - 2;
-          if (m < 22) { m = 22; run = m + st.gap + 2; }
-          hasRamp = true;
-        } else if (st.gap > 0) {
-          m = 16; run = m + st.gap + 2; hasRamp = true;
-        }
-        var wd;
-        if (i === 0) wd = Math.max((hasRamp ? m + 24 : 40) + 26 + rnd() * 40, 92) + (wantRockLay ? 80 : 0);
-        else wd = (hasRamp ? m + 26 : 44) + rnd() * 30;
-        b = a + wd;
-        info.push({ m: m, run: run, th: Math.atan2(Math.abs(st.dz), run), hasRamp: hasRamp });
-        plat.push({ a: a, b: b, y: y });
-        a = b + st.gap;
-        y = y - st.dz;
-        if (y > GY - 4 && i < n - 2) return null;
-        if (y < 150) return null;
-      } else {
-        plat.push({ a: a, b: W + 40, y: y });
-      }
-    }
-    var last = plat[n - 1];
-    if (last.a + 66 > W) return null;
-    if (last.y < 150) return null;
-
-    // strokes (reference solution)
-    for (i = 0; i < n - 1; i++) {
-      if (!info[i].hasRamp) continue;
-      var p = plat[i], q = plat[i + 1];
-      var S = [p.b - info[i].m, p.y + LINE_R];
-      var E = [q.a + 2, q.y + LINE_R];
-      ramps.push([S, E]);
-    }
-
-    // hazards
-    var hazards = [];
-    if (allowSpikes) {
-      for (i = 0; i < n - 1; i++) {
-        if (!info[i].hasRamp) continue;
-        var p2 = plat[i];
-        var tanT = Math.tan(info[i].th);
-        var zs = p2.b - info[i].m + 40 / Math.max(tanT, 0.3) + 10;
-        var ze = p2.b - 4;
-        if (ze - zs >= 16 && rnd() < 0.3 + 0.4 * t) {
-          var wdt = Math.min(ze - zs, 16 + rnd() * 40);
-          var hx = ze - wdt;
-          wdt = Math.floor(wdt / 8) * 8;
-          if (wdt >= 16) hazards.push({ x: ze - wdt, y: p2.y - 11, w: wdt, h: 11 });
-        }
-      }
-    }
-
-    // start position
-    var firstS = ramps.length ? ramps[0][0][0] : plat[0].b - 30;
-    var rocks = [];
-    var wantRock = wantRockLay && firstS - 22 > 90;
-    var sx = wantRock ? 22 + rnd() * Math.max(0, firstS - 22 - 90) : 22 + rnd() * Math.max(0, firstS - 22 - 30);
-    var start = { x: sx, y: GY - 12, dir: 1 };
-    if (wantRock) {
-      var rr = 13 + rnd() * 5;
-      var rx0 = sx + 46, rx1 = firstS - 16;
-      if (rx1 > rx0) rocks.push({ x: rx0 + rnd() * (rx1 - rx0), y: GY - rr - 1, r: rr });
-    }
-
-    // goal
-    var gx = last.a + 34 + rnd() * Math.max(0, W - last.a - 72);
-    var goal = { x: gx, y: last.y - 18, r: 14 };
-
-    var inkLen = 0;
-    for (i = 0; i < ramps.length; i++) inkLen += polyLen(ramps[i]);
-    var ratio = 1.65 - 0.45 * t;
-    var budget = Math.round(inkLen * ratio + 12);
-
-    return { wantRockLay: wantRockLay, plat: plat, ramps: ramps, hazards: hazards, start: start, rocks: rocks, goal: goal, budget: budget, inkLen: inkLen, gaps: steps.map(function (s) { return s.gap; }) };
-  }
-
-  function mirrorX(x) { return W - x; }
-
-  function build(L, attempt) {
-    attempt = attempt || 0;
-    var rnd = rng(L * 9301 + attempt * 49297 + 7);
-    var lay = null;
-    for (var relax = 0; relax < 4 && !lay; relax++)
-      for (var tries = 0; tries < 600 && !lay; tries++) lay = layout(L, attempt, rnd, relax);
-    if (!lay) throw new Error('layout failed for level ' + L);
-
-    var mirror = rnd() < 0.5;
-    var solids = lay.plat.map(function (p) { return { x: p.a, y: p.y, w: p.b - p.a, h: H + 60 - p.y }; });
-    var hazards = lay.hazards.map(function (h) { return { x: h.x, y: h.y, w: h.w, h: h.h }; });
-    var rocks = lay.rocks.map(function (r) { return { x: r.x, y: r.y, r: r.r }; });
-    var strokes = lay.ramps.map(function (r) { return r.map(function (pt) { return [pt[0], pt[1]]; }); });
-    var start = { x: lay.start.x, y: lay.start.y, dir: 1 };
-    var goal = { x: lay.goal.x, y: lay.goal.y, r: lay.goal.r };
-
-    if (mirror) {
-      solids = solids.map(function (s) { return { x: W - (s.x + s.w), y: s.y, w: s.w, h: s.h }; });
-      hazards = hazards.map(function (s) { return { x: W - (s.x + s.w), y: s.y, w: s.w, h: s.h }; });
-      rocks = rocks.map(function (r) { return { x: mirrorX(r.x), y: r.y, r: r.r }; });
-      strokes = strokes.map(function (s) { return s.map(function (pt) { return [mirrorX(pt[0]), pt[1]]; }); });
-      start.x = mirrorX(start.x); start.dir = -1;
-      goal.x = mirrorX(goal.x);
-    }
-
-    return {
-      level: L,
-      attempt: attempt,
-      world: worldOf(L),
-      final: L === TOTAL,
-      mirror: mirror,
-      W: W, H: H, groundY: GY,
-      solids: solids,
-      hazards: hazards,
-      rocks: rocks,
-      start: start,
-      goal: goal,
-      solution: strokes,
-      budget: lay.budget,
-      seed: (L * 2654435761) >>> 0
-    };
-  }
-
-  /* Physics world from level data */
-  function makeWorld(data) {
-    var w = new Physics.World();
-    w.width = W; w.height = H;
-    var i, s, r = CAP_R;
-    for (i = 0; i < data.solids.length; i++) {
-      s = data.solids[i];
-      var x0 = s.x, x1 = s.x + s.w, y0 = s.y, y1 = s.y + s.h;
-      w.addSeg(x0 + r, y0 + r, x1 - r, y0 + r, r, 0.9);       // top
-      w.addSeg(x0 + r, y0 + r, x0 + r, y1, r, 0.6);           // left face
-      w.addSeg(x1 - r, y0 + r, x1 - r, y1, r, 0.6);           // right face
-    }
-    // world walls
-    w.addSeg(-r, -400, -r, H + 200, r, 0.2);
-    w.addSeg(W + r, -400, W + r, H + 200, r, 0.2);
-    w.hazards = data.hazards.slice();
-    w.goal = { x: data.goal.x, y: data.goal.y, r: data.goal.r };
-    w.addHero(data.start.x, data.start.y, data.start.dir);
-    for (i = 0; i < data.rocks.length; i++) w.addRock(data.rocks[i].x, data.rocks[i].y, data.rocks[i].r);
-    return w;
-  }
-
-  /* add a player stroke (array of [x,y]) as physical segments; returns list of segments */
-  function addStroke(world, pts) {
-    var list = [];
-    for (var i = 1; i < pts.length; i++) {
-      list.push(world.addSeg(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], LINE_R, 1.0));
-    }
-    if (pts.length === 1) list.push(world.addSeg(pts[0][0], pts[0][1], pts[0][0], pts[0][1] + 0.01, LINE_R, 1.0));
-    return list;
-  }
-
-  /* Headless simulation used by the verifier */
-  function simulate(data, strokes, maxTime) {
-    var w = makeWorld(data);
-    var i;
-    for (i = 0; i < strokes.length; i++) addStroke(w, strokes[i]);
-    w.hero.driven = true;
-    w.hero.dir = data.start.dir;
-    var t = 0, dt = 1 / 60;
-    maxTime = maxTime || 45;
-    while (t < maxTime && w.status === 'run') { w.step(dt); t += dt; }
-    return { status: w.status, reason: w.reason, time: t, hero: { x: w.hero.x, y: w.hero.y } };
-  }
-
-  function themeOf(L) { return worldOf(L); }
-
-  var Levels = {
-    TOTAL: TOTAL, W: W, H: H, GY: GY, LINE_R: LINE_R, MAX_ATTEMPT: MAX_ATTEMPT,
-    build: build, makeWorld: makeWorld, addStroke: addStroke, simulate: simulate,
-    worldOf: worldOf, themeOf: themeOf, polyLen: polyLen
-  };
-  root.BunUpLevels = Levels;
-  if (typeof module !== 'undefined' && module.exports) module.exports = Levels;
-})(typeof self !== 'undefined' ? self : globalThis);
-
-</script>
-<script>
-/* generated by tools/verify.js — variant of the level generator that is proven solvable */
-window.BUNUP_VERIFIED = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-
-</script>
-<script>
-/*
- * BunUp — pixel art. Everything is generated in code (no image files needed):
- * hero sprites, bun, rocks, spikes, tiles and parallax backgrounds for the 5 worlds, and the logo.
- * The game canvas is 180x300 "pixels" and is scaled x2 to the 360x600 game space, then pixel-scaled by CSS.
- */
-(function (root) {
-  'use strict';
-
-  var PX = 2;                       // logical units per art pixel
-  var PAL = { k: '#000000', w: '#ffffff', b: '#c9d0ff', '.': null };
-
-  function mk(w, h) {
-    var c = document.createElement('canvas'); c.width = w; c.height = h; return c;
-  }
-  function fromRows(rows, pal) {
-    var w = 0, i, x, y;
-    for (i = 0; i < rows.length; i++) w = Math.max(w, rows[i].length);
-    var c = mk(w, rows.length), g = c.getContext('2d');
-    for (y = 0; y < rows.length; y++) for (x = 0; x < rows[y].length; x++) {
-      var col = pal[rows[y][x]];
-      if (col) { g.fillStyle = col; g.fillRect(x, y, 1, 1); }
-    }
-    return c;
-  }
-  function rand(seed) {
-    var a = seed >>> 0;
-    return function () {
-      a = (a + 0x6D2B79F5) >>> 0;
-      var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-
-  /* ---------------- hero ---------------- */
-  var BODY = [
-    '....kkkkkk....',
-    '..kkbwwwwwkk..',
-    '.kbbwwwwwwwwk.',
-    '.kbwwwwwwwwwk.',
-    'kbbwwwwwwwwwwk',
-    'kbwwwwwwkwwkwk',
-    'kbwwwwwwkwwkwk',
-    'kbwwwwwwwwwwwk',
-    '.kbwwwwwwwwwk.',
-    '..kkwwwwwwkk..',
-    '...kkwwwwkk...',
-    '..kwwwwwwwwk..',
-    '.kwwkwwwwkwwk.',
-    '.kwwkwwwwkwwk.'
-  ];
-  var LEGS = {
-    idle: ['..kwwk..kwwk..', '..kkkk..kkkk..'],
-    a:    ['.kwwk....kwwk.', '.kkkk....kkkk.'],
-    b:    ['...kwwkkwwk...', '...kkkkkkkkk..']
-  };
-  var heroFrames = {};
-  function buildHero() {
-    var body = fromRows(BODY, PAL);
-    ['idle', 'a', 'b'].forEach(function (k) {
-      var c = mk(14, 16), g = c.getContext('2d');
-      g.drawImage(body, 0, 0);
-      g.drawImage(fromRows(LEGS[k], PAL), 0, 14);
-      heroFrames[k] = c;
-    });
-    // fall / win frames: raised arms drawn on top
-    ['fall', 'win'].forEach(function (k) {
-      var c = mk(18, 20), g = c.getContext('2d');
-      var base = heroFrames[k === 'fall' ? 'a' : 'idle'];
-      g.drawImage(base, 2, 4);
-      // arms up (outlined white nubs)
-      var arm = fromRows(['.kk.', 'kwwk', 'kwwk', 'kwwk', '.kk.'], PAL);
-      g.fillStyle = '#000'; g.clearRect(2, 10, 3, 6); g.clearRect(13, 10, 3, 6);
-      g.drawImage(base, 2, 4, 14, 16, 2, 4, 14, 16);
-      g.drawImage(arm, 0, 4); g.drawImage(arm, 14, 4);
-      heroFrames[k] = c;
-    });
-  }
-
-  /* anchor: bottom-centre of the sprite sits at (x, y) in logical units */
-  function drawHero(ctx, kind, x, y, dir) {
-    var spr = heroFrames[kind] || heroFrames.idle;
-    var w = spr.width * PX, h = spr.height * PX;
-    ctx.save();
-    ctx.translate(Math.round(x / PX) * PX, Math.round(y / PX) * PX);
-    if (dir < 0) ctx.scale(-1, 1);
-    ctx.drawImage(spr, -w / 2, -h, w, h);
-    ctx.restore();
-  }
-
-  /* ---------------- procedural sprites ---------------- */
-  var bunSprite, rockSprites = {};
-  function buildBun() {
-    var W = 16, H = 13, c = mk(W, H), g = c.getContext('2d');
-    var inside = function (x, y) { var dx = (x - 7.5) / 7.6, dy = (y - 6.2) / 6.0; return dx * dx + dy * dy <= 1; };
-    var x, y;
-    for (y = 0; y < H; y++) for (x = 0; x < W; x++) {
-      if (!inside(x, y)) continue;
-      var edge = !inside(x - 1, y) || !inside(x + 1, y) || !inside(x, y - 1) || !inside(x, y + 1);
-      var col;
-      if (edge) col = '#3b1f0b';
-      else if (y >= 9) col = '#b86d22';
-      else if (y >= 7) col = '#d9903a';
-      else if (y <= 3 && x < 9) col = '#ffd98a';
-      else col = '#f0ad55';
-      g.fillStyle = col; g.fillRect(x, y, 1, 1);
-    }
-    g.fillStyle = '#fff3c4';
-    [[5, 3], [9, 2], [7, 5], [11, 4], [4, 6], [10, 7]].forEach(function (p) { g.fillRect(p[0], p[1], 1, 1); });
-    bunSprite = c;
-  }
-  function drawBun(ctx, x, yBottom, t) {
-    var bob = Math.round(Math.sin(t * 3) * 1.5) * PX;
-    var w = bunSprite.width * PX, h = bunSprite.height * PX;
-    ctx.drawImage(bunSprite, Math.round((x - w / 2) / PX) * PX, Math.round((yBottom - h) / PX) * PX + bob, w, h);
-    // sparkle
-    var s = Math.floor(t * 4) % 4;
-    ctx.fillStyle = '#fff';
-    var sx = x + 14, sy = yBottom - h - 2 + bob;
-    if (s === 0) { ctx.fillRect(sx, sy, 2, 2); }
-    if (s === 1) { ctx.fillRect(sx - 2, sy, 6, 2); ctx.fillRect(sx, sy - 2, 2, 6); }
-    if (s === 2) { ctx.fillRect(sx, sy, 2, 2); }
-  }
-
-  function rockSprite(r) {
-    var key = Math.round(r);
-    if (rockSprites[key]) return rockSprites[key];
-    var d = Math.round(r * 2 / PX), c = mk(d, d), g = c.getContext('2d');
-    var cx = d / 2 - 0.5, cy = d / 2 - 0.5, rad = d / 2;
-    var inside = function (x, y) { var dx = x - cx, dy = y - cy; return dx * dx + dy * dy <= rad * rad; };
-    for (var y = 0; y < d; y++) for (var x = 0; x < d; x++) {
-      if (!inside(x, y)) continue;
-      var edge = !inside(x - 1, y) || !inside(x + 1, y) || !inside(x, y - 1) || !inside(x, y + 1);
-      g.fillStyle = edge ? '#000' : ((x + y < d * 0.9) ? '#a39ab8' : '#6f6784');
-      g.fillRect(x, y, 1, 1);
-    }
-    g.fillStyle = '#4c4560'; g.fillRect(Math.floor(d * 0.55), Math.floor(d * 0.35), 2, 2); g.fillRect(Math.floor(d * 0.3), Math.floor(d * 0.62), 2, 1);
-    rockSprites[key] = c;
-    return c;
-  }
-  function drawRock(ctx, r) {
-    var spr = rockSprite(r.r);
-    ctx.save();
-    ctx.translate(r.x, r.y); ctx.rotate(r.ang || 0);
-    ctx.drawImage(spr, -spr.width * PX / 2, -spr.height * PX / 2, spr.width * PX, spr.height * PX);
-    ctx.restore();
-  }
-
-  function drawSpikes(ctx, hz, wd) {
-    var n = Math.max(1, Math.round(hz.w / 8)), i, x0;
-    var col = wd === 2 ? ['#d6ecff', '#7fb1e6'] : ['#e6e6ee', '#8c8ca0'];
-    for (i = 0; i < n; i++) {
-      x0 = hz.x + i * (hz.w / n);
-      var w = hz.w / n, y = hz.y + hz.h;
-      ctx.fillStyle = '#000';
-      ctx.beginPath(); ctx.moveTo(x0 - 1, y); ctx.lineTo(x0 + w / 2, y - hz.h - 2); ctx.lineTo(x0 + w + 1, y); ctx.fill();
-      ctx.fillStyle = col[0];
-      ctx.beginPath(); ctx.moveTo(x0 + 2, y); ctx.lineTo(x0 + w / 2, y - hz.h + 1); ctx.lineTo(x0 + w / 2, y); ctx.fill();
-      ctx.fillStyle = col[1];
-      ctx.beginPath(); ctx.moveTo(x0 + w / 2, y); ctx.lineTo(x0 + w / 2, y - hz.h + 1); ctx.lineTo(x0 + w - 2, y); ctx.fill();
-    }
-  }
-
-  /* ---------------- themed tiles ---------------- */
-  var THEMES = [
-    { // caves
-      name: 'Камни и пещеры',
-      tile: ['#5a5470', '#4a4560', '#6d6786', '#403b55'], top: '#a49cc4', topDark: '#7a7396', line: '#ffe066',
-      bgTop: '#120d22', bgBot: '#2d2147', accent: '#7be0ff', accent2: '#ff7bd5'
-    },
-    { // earth
-      name: 'Земля и почва',
-      tile: ['#7a4a2a', '#693e22', '#8a5530', '#5a341b'], top: '#5cc24a', topDark: '#2e8a32', line: '#ffe066',
-      bgTop: '#2a1b12', bgBot: '#4d3220', accent: '#e8c27a', accent2: '#6b4a2e'
-    },
-    { // snow
-      name: 'Снежные горы',
-      tile: ['#d3e6f7', '#bcd5ec', '#e9f4fd', '#a9c6e2'], top: '#ffffff', topDark: '#cfe3f5', line: '#ff6f6f',
-      bgTop: '#8fb8e8', bgBot: '#e3f1ff', accent: '#ffffff', accent2: '#8fb0d6'
-    },
-    { // clouds
-      name: 'Облака',
-      tile: ['#ffffff', '#eef6ff', '#dcebfb', '#cfe1f7'], top: '#ffffff', topDark: '#c3d9f2', line: '#ff6f6f',
-      bgTop: '#3fa7ff', bgBot: '#bfe8ff', accent: '#ffffff', accent2: '#ffe27a'
-    },
-    { // final
-      name: 'Финал',
-      tile: ['#fff2ea', '#ffe3d6', '#ffd3c4', '#f6bfb0'], top: '#fffaf5', topDark: '#f2b9a4', line: '#7a3cff',
-      bgTop: '#ff8d6b', bgBot: '#ffe0a6', accent: '#ffffff', accent2: '#ffd36b'
-    }
-  ];
-
-  var patterns = [], bgs = [], tileCan = [];
-  function buildTile(wd) {
-    var T = THEMES[wd], c = mk(8, 8), g = c.getContext('2d'), r = rand(wd * 77 + 3), x, y;
-    for (y = 0; y < 8; y++) for (x = 0; x < 8; x++) {
-      var v = r();
-      g.fillStyle = v < 0.55 ? T.tile[0] : v < 0.78 ? T.tile[1] : v < 0.92 ? T.tile[2] : T.tile[3];
-      g.fillRect(x, y, 1, 1);
-    }
-    if (wd === 0) { g.fillStyle = T.tile[3]; g.fillRect(1, 5, 3, 1); g.fillRect(5, 1, 2, 1); }
-    if (wd === 1) { g.fillStyle = '#9a6a42'; g.fillRect(2, 2, 2, 2); g.fillStyle = '#4a2b15'; g.fillRect(5, 6, 2, 1); }
-    if (wd === 2) { g.fillStyle = '#ffffff'; g.fillRect(1, 1, 1, 1); g.fillRect(5, 4, 1, 1); }
-    tileCan[wd] = c;
-  }
-  function getPattern(ctx, wd) {
-    var key = wd;
-    if (!tileCan[key]) buildTile(key);
-    var p = ctx.createPattern(tileCan[key], 'repeat');
-    if (p.setTransform && root.DOMMatrix) p.setTransform(new DOMMatrix([PX, 0, 0, PX, 0, 0]));
-    return p;
-  }
-
-  function drawSolid(ctx, s, wd, pat) {
-    var T = THEMES[wd];
-    var x = Math.round(s.x / PX) * PX, y = Math.round(s.y / PX) * PX, w = Math.round(s.w / PX) * PX, h = s.h;
-    ctx.fillStyle = pat;
-    ctx.fillRect(x, y, w, h);
-    // top cap
-    ctx.fillStyle = T.top; ctx.fillRect(x, y, w, 4);
-    ctx.fillStyle = T.topDark; ctx.fillRect(x, y + 4, w, 2);
-    if (wd === 1) {          // grass blades + hanging roots
-      ctx.fillStyle = T.topDark;
-      for (var i = 0; i < w; i += 8) ctx.fillRect(x + i, y + 6, 2, 2 + ((i / 8) % 3) * 2);
-    } else if (wd === 2) {   // icicles
-      ctx.fillStyle = T.top;
-      for (var j = 2; j < w; j += 10) ctx.fillRect(x + j, y + 6, 2, 2 + ((j / 10) % 3) * 2);
-    } else if (wd === 3 || wd === 4) { // cloud puffs on top
-      ctx.fillStyle = T.top;
-      for (var k = 0; k < w; k += 12) { ctx.fillRect(x + k + 2, y - 2, 6, 2); }
-    }
-    // outline: left/top
-    ctx.fillStyle = 'rgba(0,0,0,.85)';
-    ctx.fillRect(x, y - 2, w, 2);
-    ctx.fillRect(x - 2, y, 2, h);
-    ctx.fillRect(x + w, y, 2, h);
-  }
-
-  /* ---------------- backgrounds (180x300) ---------------- */
-  function buildBg(wd) {
-    var T = THEMES[wd], W = 180, H = 300, c = mk(W, H), g = c.getContext('2d'), r = rand(1000 + wd * 31), i, x, y;
-    var grad = g.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, T.bgTop); grad.addColorStop(1, T.bgBot);
-    g.fillStyle = grad; g.fillRect(0, 0, W, H);
-    // banding to keep a pixel-art look
-    g.fillStyle = 'rgba(0,0,0,.05)';
-    for (y = 0; y < H; y += 6) g.fillRect(0, y, W, 3);
-
-    if (wd === 0) {
-      // far rock layers
-      for (i = 0; i < 3; i++) {
-        g.fillStyle = ['#1c1533', '#241a40', '#2a2048'][i];
-        for (x = 0; x < W; x += 6) {
-          var hh = 30 + Math.floor(r() * 50) + i * 40;
-          g.fillRect(x, H - hh, 6, hh);
-        }
-      }
-      // stalactites
-      g.fillStyle = '#17112b';
-      for (x = 0; x < W; x += 9) {
-        var len = 8 + Math.floor(r() * 30);
-        for (y = 0; y < len; y++) g.fillRect(x + Math.floor(y * 0.0), y, Math.max(1, 6 - Math.floor(y / (len / 5))), 1);
-      }
-      // crystals
-      for (i = 0; i < 10; i++) {
-        x = Math.floor(r() * (W - 6)); y = 40 + Math.floor(r() * 220);
-        g.fillStyle = r() < 0.5 ? T.accent : T.accent2;
-        g.fillRect(x, y, 2, 5); g.fillRect(x - 1, y + 2, 4, 2);
-        g.fillStyle = '#ffffff'; g.fillRect(x, y, 1, 2);
-      }
-    } else if (wd === 1) {
-      // soil layers, stones, roots
-      for (i = 0; i < 160; i++) {
-        x = Math.floor(r() * W); y = Math.floor(r() * H);
-        g.fillStyle = r() < 0.5 ? '#3a2616' : '#5c3d26';
-        g.fillRect(x, y, 2 + Math.floor(r() * 3), 2);
-      }
-      for (i = 0; i < 12; i++) {
-        x = Math.floor(r() * W); y = Math.floor(r() * H);
-        g.fillStyle = '#7a7a86'; g.fillRect(x, y, 5, 4); g.fillStyle = '#a4a4b2'; g.fillRect(x, y, 3, 2);
-      }
-      g.fillStyle = '#2a4a1d';
-      for (i = 0; i < 8; i++) {
-        x = Math.floor(r() * W); var l = 20 + Math.floor(r() * 40);
-        for (y = 0; y < l; y++) g.fillRect(x + Math.round(Math.sin(y * 0.3) * 2), y, 1, 1);
-      }
-      // fossils / mushrooms
-      for (i = 0; i < 5; i++) {
-        x = Math.floor(r() * (W - 8)); y = 80 + Math.floor(r() * 200);
-        g.fillStyle = '#e8d8b0'; g.fillRect(x, y, 6, 1); g.fillRect(x + 1, y + 1, 4, 1); g.fillRect(x + 2, y - 1, 2, 1);
-      }
-    } else if (wd === 2) {
-      // mountains
-      var peaks = [[30, 150, 110], [90, 120, 140], [150, 160, 100]];
-      peaks.forEach(function (p, idx) {
-        for (var yy = 0; yy < p[2]; yy++) {
-          var half = Math.floor(yy * 0.9);
-          g.fillStyle = idx === 1 ? '#7d9cc4' : '#92b0d4';
-          g.fillRect(p[0] - half, p[1] + 100 - p[2] + yy, half * 2, 1);
-          if (yy < 28) { g.fillStyle = '#ffffff'; g.fillRect(p[0] - Math.floor(yy * 0.9), p[1] + 100 - p[2] + yy, Math.floor(yy * 1.8), 1); }
-        }
-      });
-      g.fillStyle = '#b6cde8'; g.fillRect(0, 250, W, 50);
-      g.fillStyle = '#ffffff'; g.fillRect(0, 262, W, 38);
-      // pines
-      for (i = 0; i < 7; i++) {
-        x = Math.floor(r() * (W - 10)); y = 230 + Math.floor(r() * 30);
-        for (var t = 0; t < 4; t++) { g.fillStyle = '#2f6b57'; g.fillRect(x + 4 - t * 2 - 1, y + t * 5, t * 4 + 4, 5); g.fillStyle = '#fff'; g.fillRect(x + 4 - t * 2 - 1, y + t * 5, t * 4 + 4, 1); }
-        g.fillStyle = '#5a3a22'; g.fillRect(x + 3, y + 20, 2, 5);
-      }
-    } else {
-      // sun / moon-ish and far clouds
-      var sunC = wd === 4 ? '#fff0b0' : '#fff6c0';
-      g.fillStyle = sunC;
-      for (y = -10; y <= 10; y++) { var wdt = Math.floor(Math.sqrt(100 - y * y)); g.fillRect(140 - wdt, 36 + y, wdt * 2, 1); }
-      for (i = 0; i < 9; i++) {
-        x = Math.floor(r() * (W - 40)); y = 20 + Math.floor(r() * 250);
-        var cw = 22 + Math.floor(r() * 26);
-        g.fillStyle = wd === 4 ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.7)';
-        g.fillRect(x + 6, y, cw - 12, 4); g.fillRect(x + 2, y + 3, cw - 4, 4); g.fillRect(x, y + 6, cw, 3);
-        g.fillStyle = 'rgba(160,200,240,.5)'; g.fillRect(x + 2, y + 9, cw - 4, 1);
-      }
-      if (wd === 3) { // birds
-        g.fillStyle = '#2b4a78';
-        for (i = 0; i < 4; i++) { x = 20 + Math.floor(r() * 130); y = 60 + Math.floor(r() * 120); g.fillRect(x, y, 2, 1); g.fillRect(x + 2, y + 1, 1, 1); g.fillRect(x + 3, y, 2, 1); }
-      }
-    }
-    bgs[wd] = c;
-  }
-
-  /* animated overlay (snow, dust, drifting clouds) */
-  var parts = [];
-  function initParts(wd) {
-    var r = rand(500 + wd), i, n = wd === 2 ? 60 : wd === 0 ? 24 : wd === 1 ? 20 : 8;
-    parts = [];
-    for (i = 0; i < n; i++) parts.push({ x: r() * 180, y: r() * 300, s: 0.4 + r() * 1.0, p: r() * 6 });
-  }
-  function drawBgAnim(ctx, wd, t) {
-    var i, p;
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    for (i = 0; i < parts.length; i++) {
-      p = parts[i];
-      if (wd === 2) {
-        var yy = (p.y + t * 14 * p.s) % 300, xx = (p.x + Math.sin(t * 0.8 + p.p) * 6 + t * 3) % 180;
-        ctx.fillStyle = '#fff'; ctx.fillRect(Math.floor(xx), Math.floor(yy), 1 + (p.s > 1), 1 + (p.s > 1));
-      } else if (wd === 0) {
-        var y0 = (p.y - t * 4 * p.s + 300) % 300;
-        ctx.fillStyle = (Math.floor(t * 2 + p.p) % 2) ? 'rgba(123,224,255,.8)' : 'rgba(255,123,213,.7)';
-        ctx.fillRect(Math.floor(p.x + Math.sin(t + p.p) * 4), Math.floor(y0), 1, 1);
-      } else if (wd === 1) {
-        var y1 = (p.y + t * 3 * p.s) % 300;
-        ctx.fillStyle = 'rgba(232,194,122,.5)'; ctx.fillRect(Math.floor(p.x), Math.floor(y1), 1, 1);
-      } else {
-        var xx2 = (p.x + t * 4 * p.s) % 220 - 30, yy2 = (p.y * 0.8 + 10) % 280;
-        ctx.fillStyle = 'rgba(255,255,255,.75)';
-        ctx.fillRect(Math.floor(xx2) + 4, Math.floor(yy2), 12, 3); ctx.fillRect(Math.floor(xx2), Math.floor(yy2) + 2, 20, 3);
-      }
-    }
-    ctx.restore();
-  }
-
-  /* ---------------- final level props ---------------- */
-  function drawFinalProps(ctx, g, t) {
-    // table + plate + crumbs on the last cloud, no bun
-    var x = g.x, yb = g.y + 18;      // platform top
-    var Wd = 40;
-    ctx.save();
-    ctx.translate(Math.round(x / PX) * PX, Math.round(yb / PX) * PX);
-    ctx.scale(1.5, 1.5);
-    ctx.fillStyle = '#000'; ctx.fillRect(-Wd / 2 - 2, -28, Wd + 4, 8);       // table top outline
-    ctx.fillStyle = '#c98a4b'; ctx.fillRect(-Wd / 2, -26, Wd, 4);
-    ctx.fillStyle = '#e6a965'; ctx.fillRect(-Wd / 2, -26, Wd, 2);
-    ctx.fillStyle = '#000'; ctx.fillRect(-Wd / 2 + 2, -22, 6, 22); ctx.fillRect(Wd / 2 - 8, -22, 6, 22);
-    ctx.fillStyle = '#a56d36'; ctx.fillRect(-Wd / 2 + 4, -22, 2, 22); ctx.fillRect(Wd / 2 - 6, -22, 2, 22);
-    // plate
-    ctx.fillStyle = '#000'; ctx.fillRect(-10, -32, 20, 6);
-    ctx.fillStyle = '#ffffff'; ctx.fillRect(-8, -32, 16, 4);
-    ctx.fillStyle = '#cfd6ff'; ctx.fillRect(-8, -30, 16, 2);
-    // crumbs
-    ctx.fillStyle = '#d9903a';
-    [[-6, -34], [-2, -33], [3, -34], [6, -33], [-9, -29], [8, -29]].forEach(function (c) { ctx.fillRect(c[0], c[1], 2, 2); });
-    ctx.fillStyle = '#fff3c4'; ctx.fillRect(0, -36, 2, 2);
-    ctx.restore();
-  }
-
-  /* ---------------- logo (5x7 bitmap font) ---------------- */
-  var FONT = {
-    B: ['11110', '10001', '10001', '11110', '10001', '10001', '11110', '00000', '00000'],
-    U: ['10001', '10001', '10001', '10001', '10001', '10001', '01110', '00000', '00000'],
-    u: ['00000', '00000', '10001', '10001', '10001', '10011', '01101', '00000', '00000'],
-    n: ['00000', '00000', '10110', '11001', '10001', '10001', '10001', '00000', '00000'],
-    p: ['00000', '00000', '11110', '10001', '10001', '11110', '10000', '10000', '10000']
-  };
-  function logo(scale, text) {
-    text = text || 'BunUp';
-    var gap = 1, w = text.length * 6 - 1, h = 9, pad = 2;
-    var c = mk((w + pad * 2) * scale, (h + pad * 2) * scale), g = c.getContext('2d');
-    var cols = ['#fff1b8', '#ffc24a', '#ffc24a', '#f0952c', '#f0952c', '#c86f1c', '#c86f1c', '#a85a14', '#a85a14'];
-    var ox, oy, dx, dy, i, ch, row, x, y;
-    // outline then fill
-    for (var pass = 0; pass < 2; pass++) {
-      for (i = 0; i < text.length; i++) {
-        ch = FONT[text[i]]; if (!ch) continue;
-        for (y = 0; y < ch.length; y++) for (x = 0; x < 5; x++) {
-          if (ch[y][x] !== '1') continue;
-          var px = (pad + i * 6 + x) * scale, py = (pad + y) * scale;
-          if (pass === 0) {
-            g.fillStyle = '#000';
-            for (dx = -1; dx <= 1; dx++) for (dy = -1; dy <= 2; dy++) g.fillRect(px + dx * scale, py + dy * scale, scale, scale);
-          } else {
-            g.fillStyle = cols[y]; g.fillRect(px, py, scale, scale);
-          }
-        }
-      }
-    }
-    return c;
-  }
-
-  var ready = false;
-  function init() {
-    if (ready) return;
-    buildHero(); buildBun();
-    for (var i = 0; i < 5; i++) { buildTile(i); buildBg(i); }
-    ready = true;
-  }
-
-  root.BunUpArt = {
-    PX: PX, THEMES: THEMES, init: init,
-    drawHero: drawHero, drawBun: drawBun, drawRock: drawRock, drawSpikes: drawSpikes,
-    drawSolid: drawSolid, getPattern: getPattern, drawFinalProps: drawFinalProps,
-    bg: function (wd) { return bgs[wd]; }, initParts: initParts, drawBgAnim: drawBgAnim,
-    logo: logo, heroFrame: function (k) { return heroFrames[k]; }, bunSprite: function () { return bunSprite; }
-  };
-})(typeof self !== 'undefined' ? self : globalThis);
-
-</script>
-<script>
-/*
- * BunUp — sound. Pure WebAudio synthesis: no audio files, works offline.
- * Sound effects + a tiny chiptune loop, both can be switched off in settings.
- */
-(function (root) {
-  'use strict';
-  var ctx = null, master = null, sfxOn = true, musicOn = true, musicTimer = null, nextT = 0, step = 0, world = 0;
-  var lastDraw = 0;
-
-  function ensure() {
-    if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return ctx; }
-    var AC = root.AudioContext || root.webkitAudioContext;
-    if (!AC) return null;
-    try {
-      ctx = new AC();
-      master = ctx.createGain(); master.gain.value = 0.5; master.connect(ctx.destination);
-    } catch (e) { ctx = null; }
-    return ctx;
-  }
-
-  function tone(freq, dur, type, vol, slideTo, when, bus) {
-    if (!ctx) return;
-    var t = when || ctx.currentTime;
-    var o = ctx.createOscillator(), g = ctx.createGain();
-    o.type = type || 'square';
-    o.frequency.setValueAtTime(freq, t);
-    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(vol || 0.2, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g); g.connect(bus || master);
-    o.start(t); o.stop(t + dur + 0.02);
-  }
-  function noise(dur, vol) {
-    if (!ctx) return;
-    var n = Math.floor(ctx.sampleRate * dur), buf = ctx.createBuffer(1, n, ctx.sampleRate), d = buf.getChannelData(0), i;
-    for (i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
-    var s = ctx.createBufferSource(), g = ctx.createGain();
-    s.buffer = buf; g.gain.value = vol || 0.2; s.connect(g); g.connect(master); s.start();
-  }
-
-  var Snd = {
-    unlock: function () { ensure(); },
-    setSfx: function (v) { sfxOn = !!v; },
-    setMusic: function (v) { musicOn = !!v; if (!musicOn) Snd.stopMusic(); },
-    click: function () { if (!sfxOn || !ensure()) return; tone(660, 0.06, 'square', 0.12); tone(880, 0.06, 'square', 0.1, 0, ctx.currentTime + 0.05); },
-    draw: function () {
-      if (!sfxOn || !ensure()) return;
-      var now = ctx.currentTime; if (now - lastDraw < 0.07) return; lastDraw = now;
-      tone(300 + Math.random() * 120, 0.05, 'triangle', 0.07);
-    },
-    go: function () { if (!sfxOn || !ensure()) return; tone(392, 0.08, 'square', 0.14); tone(587, 0.12, 'square', 0.14, 0, ctx.currentTime + 0.08); },
-    flip: function () { if (!sfxOn || !ensure()) return; tone(500, 0.07, 'square', 0.08, 300); },
-    undo: function () { if (!sfxOn || !ensure()) return; tone(440, 0.09, 'triangle', 0.12, 220); },
-    win: function () {
-      if (!sfxOn || !ensure()) return;
-      var t = ctx.currentTime, n = [523, 659, 784, 1047, 784, 1047];
-      n.forEach(function (f, i) { tone(f, 0.16, 'square', 0.15, 0, t + i * 0.11); });
-    },
-    lose: function () {
-      if (!sfxOn || !ensure()) return;
-      tone(330, 0.18, 'sawtooth', 0.16, 160); tone(220, 0.3, 'sawtooth', 0.16, 80, ctx.currentTime + 0.17); noise(0.15, 0.12);
-    },
-    funny: function () {
-      if (!sfxOn || !ensure()) return;
-      var t = ctx.currentTime;
-      [392, 370, 349, 330, 220].forEach(function (f, i) { tone(f, 0.22, 'triangle', 0.2, f * 0.97, t + i * 0.2); });
-    },
-    startMusic: function (wd) {
-      world = wd || 0;
-      if (!musicOn || !ensure()) return;
-      if (musicTimer) return;
-      nextT = ctx.currentTime + 0.1; step = 0;
-      musicTimer = setInterval(Snd._sched, 120);
-    },
-    stopMusic: function () { if (musicTimer) { clearInterval(musicTimer); musicTimer = null; } },
-    setWorld: function (wd) { world = wd; },
-    _sched: function () {
-      if (!ctx || !musicOn) return;
-      var roots = [110, 98, 123.5, 130.8, 117], root = roots[world] || 110;
-      var scale = world === 2 || world === 3 ? [0, 4, 7, 9, 12, 9, 7, 4] : [0, 3, 7, 10, 12, 10, 7, 3];
-      var spd = [0.26, 0.24, 0.22, 0.2, 0.24][world] || 0.24;
-      while (nextT < ctx.currentTime + 0.4) {
-        var s = step % 32, deg = scale[s % 8];
-        var bar = Math.floor(s / 8), shift = [0, 5, 3, 7][bar] || 0;
-        var f = root * 2 * Math.pow(2, (deg + shift) / 12);
-        tone(f, spd * 0.9, 'square', 0.028, 0, nextT);
-        if (s % 4 === 0) tone(root * Math.pow(2, shift / 12), spd * 1.8, 'triangle', 0.06, 0, nextT);
-        nextT += spd; step++;
-      }
-    }
-  };
-  root.BunUpAudio = Snd;
-})(typeof self !== 'undefined' ? self : globalThis);
-
-</script>
-<script>
-/* BunUp — game logic, UI, save system */
-(function () {
-  'use strict';
-
-  var Lv = window.BunUpLevels, Art = window.BunUpArt, Snd = window.BunUpAudio;
-  var TOTAL = Lv.TOTAL;
-  var VER = window.BUNUP_VERIFIED || [];
-  var KEY = 'bunup.save.v1';
-  var WORLD_RANGES = [[1, 199], [200, 299], [300, 399], [400, 499], [500, 500]];
-  var WORLD_NAMES = ['Камни и пещеры', 'Земля и почва', 'Снежные горы', 'Облака', 'Финал'];
-  var RUN_TIMEOUT = 45;
-
-  function $(id) { return document.getElementById(id); }
-
-  /* ---------------- save ---------------- */
-  var memSave = null;
-  function defaultSave() { return { unlocked: 1, done: new Array(TOTAL + 1).join('0'), sfx: true, music: true }; }
-  function loadSave() {
-    var s = defaultSave(), raw = null;
-    try { raw = localStorage.getItem(KEY); } catch (e) { raw = memSave; }
-    if (raw) {
-      try {
-        var o = JSON.parse(raw);
-        if (o && typeof o === 'object') {
-          s.unlocked = Math.min(TOTAL, Math.max(1, o.unlocked | 0));
-          if (typeof o.done === 'string' && o.done.length === TOTAL) s.done = o.done;
-          s.sfx = o.sfx !== false; s.music = o.music !== false;
-        }
-      } catch (e2) { /* corrupted save -> defaults */ }
-    }
-    return s;
-  }
-  var save = loadSave();
-  function writeSave() {
-    var raw = JSON.stringify(save);
-    try { localStorage.setItem(KEY, raw); } catch (e) { memSave = raw; }
-  }
-  function isDone(L) { return save.done.charAt(L - 1) === '1'; }
-  function doneCount() { var n = 0; for (var i = 0; i < TOTAL; i++) if (save.done.charAt(i) === '1') n++; return n; }
-  function markDone(L) {
-    save.done = save.done.substr(0, L - 1) + '1' + save.done.substr(L);
-    save.unlocked = Math.max(save.unlocked, Math.min(TOTAL, L + 1));
-    writeSave();
-  }
-
-  /* ---------------- screens ---------------- */
-  var screens = ['scr-menu', 'scr-levels', 'scr-game', 'scr-settings', 'scr-about'];
-  var current = 'scr-menu';
-  function show(id) {
-    current = id;
-    screens.forEach(function (s) { $(s).classList.toggle('on', s === id); });
-    if (id === 'scr-menu') refreshMenu();
-    if (id === 'scr-levels') renderLevels(worldTab);
-    if (id === 'scr-settings') refreshSettings();
-    if (id === 'scr-game') layout();
-  }
-
-  function refreshMenu() {
-    $('mPlaySub').textContent = save.unlocked > 1 || doneCount() > 0 ? 'Продолжить: уровень ' + save.unlocked : 'Уровень 1';
-  }
-
-  /* ---------------- level select ---------------- */
-  var worldTab = 0;
-  function worldOfLevel(L) { return Lv.worldOf(L); }
-  function buildTabs() {
-    var h = '';
-    WORLD_RANGES.forEach(function (r, i) {
-      h += '<button class="tab" data-w="' + i + '"><b>' + (i + 1) + '</b>' + (r[0] === r[1] ? r[0] : r[0] + '-' + r[1]) + '</button>';
-    });
-    $('lvTabs').innerHTML = h;
-  }
-  function renderLevels(w) {
-    worldTab = w;
-    var tabs = $('lvTabs').children, i;
-    for (i = 0; i < tabs.length; i++) tabs[i].classList.toggle('on', i === w);
-    $('lvWorldName').textContent = WORLD_NAMES[w];
-    $('lvCount').textContent = doneCount() + '/' + TOTAL;
-    var r = WORLD_RANGES[w], h = '';
-    for (var L = r[0]; L <= r[1]; L++) {
-      var cls = 'lv';
-      if (L > save.unlocked) cls += ' lock'; else if (isDone(L)) cls += ' done'; else if (L === save.unlocked) cls += ' cur';
-      h += '<button class="' + cls + '" data-l="' + L + '"' + (L > save.unlocked ? ' disabled' : '') + '>' + L + '</button>';
-    }
-    $('lvGrid').innerHTML = h;
-    $('lvGrid').parentNode.scrollTop = 0;
-    if (w === worldOfLevel(save.unlocked)) {
-      var cur = $('lvGrid').querySelector('.cur');
-      if (cur && cur.scrollIntoView) { try { cur.scrollIntoView({ block: 'center' }); } catch (e) { } }
-    }
-  }
-
-  /* ---------------- game state ---------------- */
-  var cv = $('cv'), cx = cv.getContext('2d');
-  var G = {
-    level: 1, data: null, world: null, wd: 0, state: 'ready', endKind: '', endT: 0,
-    strokes: [], used: 0, cur: null, drawing: false, runT: 0, time: 0, pattern: null, patWd: -1,
-    particles: [], fade: 1, shake: 0
-  };
-
-  function startLevel(L) {
-    L = Math.max(1, Math.min(TOTAL, L | 0));
-    G.level = L;
-    G.data = Lv.build(L, VER[L - 1] || 0);
-    G.wd = G.data.world;
-    Art.initParts(G.wd);
-    Snd.setWorld(G.wd);
-    $('gLevel').textContent = 'Уровень ' + L;
-    $('gWorld').textContent = WORLD_NAMES[G.wd];
-    resetLevel();
-    show('scr-game');
-    Snd.startMusic(G.wd);
-  }
-
-  function resetLevel() {
-    G.world = Lv.makeWorld(G.data);
-    G.strokes = []; G.used = 0; G.cur = null; G.drawing = false;
-    G.state = 'ready'; G.endKind = ''; G.endT = 0; G.runT = 0; G.fade = 1;
-    G.particles = []; G.shake = 0;
-    ['ovWin', 'ovLose', 'ovFinal'].forEach(function (id) { $(id).classList.remove('on'); });
-    $('hint').classList.remove('off');
-    setGoButton();
-    updateInk();
-  }
-
-  function setGoButton() {
-    var b = $('bGo');
-    if (G.state === 'ready') { b.textContent = 'СТАРТ'; b.classList.remove('again'); }
-    else { b.textContent = 'ЗАНОВО'; b.classList.add('again'); }
-  }
-
-  function remaining() { return Math.max(0, G.data.budget - G.used); }
-  function updateInk() {
-    var pct = Math.max(0, Math.min(100, Math.ceil(remaining() / G.data.budget * 100 - 0.001)));
-    if (remaining() < 0.5) pct = 0;
-    $('inkFill').style.width = pct + '%';
-    $('inkPct').textContent = pct + '%';
-    $('inkFill').parentNode.classList.toggle('low', pct <= 20);
-  }
-
-  function beginRun() {
-    if (G.state !== 'ready') return;
-    G.state = 'run';
-    G.world.hero.driven = true;
-    G.world.hero.dir = G.data.start.dir;
-    $('hint').classList.add('off');
-    setGoButton();
-    Snd.go();
-  }
-
-  function popStroke(s) {
-    G.world.removeSegs(s.segs);
-    G.used = Math.max(0, G.used - s.len);
-  }
-  function undo() {
-    if (G.state === 'end' || G.strokes.length === 0) return;
-    popStroke(G.strokes.pop());
-    updateInk(); Snd.undo();
-  }
-  function clearAll() {
-    if (G.state === 'end' || G.strokes.length === 0) return;
-    while (G.strokes.length) popStroke(G.strokes.pop());
-    G.used = 0;
-    updateInk(); Snd.undo();
-  }
-
-  /* ---------------- drawing input ---------------- */
-  function pos(e) {
-    var r = cv.getBoundingClientRect();
-    var bw = 4, w = r.width - bw * 2, h = r.height - bw * 2;
-    var x = (e.clientX - r.left - bw) / w * Lv.W, y = (e.clientY - r.top - bw) / h * Lv.H;
-    return [Math.max(0, Math.min(Lv.W, x)), Math.max(0, Math.min(Lv.H, y))];
-  }
-  function addPoint(p) {
-    var s = G.cur; if (!s) return;
-    var last = s.pts[s.pts.length - 1];
-    var dx = p[0] - last[0], dy = p[1] - last[1], d = Math.sqrt(dx * dx + dy * dy);
-    if (d < 4) return;
-    var rem = remaining();
-    if (rem <= 0.01) { finishStroke(); return; }
-    if (d > rem) { p = [last[0] + dx / d * rem, last[1] + dy / d * rem]; d = rem; }
-    var segs = Lv.addStroke(G.world, [last, p]);
-    for (var i = 0; i < segs.length; i++) s.segs.push(segs[i]);
-    s.pts.push(p); s.len += d; G.used += d;
-    updateInk(); Snd.draw();
-    if (remaining() <= 0.01) finishStroke();
-  }
-  function finishStroke() {
-    var s = G.cur;
-    G.cur = null; G.drawing = false;
-    if (s && s.segs.length) G.strokes.push(s);
-  }
-
-  cv.addEventListener('pointerdown', function (e) {
-    Snd.unlock();
-    if (G.state === 'end' || remaining() <= 0.01) return;
-    e.preventDefault();
-    try { cv.setPointerCapture(e.pointerId); } catch (x) { }
-    G.drawing = true;
-    G.cur = { pts: [pos(e)], segs: [], len: 0 };
-    $('hint').classList.add('off');
-  });
-  cv.addEventListener('pointermove', function (e) {
-    if (!G.drawing) return;
-    e.preventDefault();
-    var list = e.getCoalescedEvents ? e.getCoalescedEvents() : null;
-    if (!list || !list.length) list = [e];
-    for (var i = 0; i < list.length; i++) addPoint(pos(list[i]));
-  });
-  function up(e) { if (G.drawing) { addPoint(pos(e)); finishStroke(); } }
-  cv.addEventListener('pointerup', up);
-  cv.addEventListener('pointercancel', function () { if (G.drawing) finishStroke(); });
-  cv.addEventListener('contextmenu', function (e) { e.preventDefault(); });
-
-  /* ---------------- particles ---------------- */
-  function burst(x, y, n, colors, speed, up) {
-    for (var i = 0; i < n; i++) {
-      var a = Math.random() * Math.PI * 2, s = (0.3 + Math.random()) * speed;
-      G.particles.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - (up || 0), life: 0.7 + Math.random() * 0.7, c: colors[Math.floor(Math.random() * colors.length)], s: 2 + Math.floor(Math.random() * 2) * 2 });
-    }
-  }
-  function stepParticles(dt) {
-    for (var i = G.particles.length - 1; i >= 0; i--) {
-      var p = G.particles[i];
-      p.vy += 700 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
-      if (p.life <= 0) G.particles.splice(i, 1);
-    }
-  }
-
-  /* ---------------- end of level ---------------- */
-  function onWin() {
-    G.state = 'end'; G.endKind = 'win'; G.endT = 0;
-    var L = G.level;
-    markDone(L);
-    var h = G.world.hero;
-    burst(h.x, h.y, 40, ['#ffd54a', '#ff6f6f', '#6fe3ff', '#8dff7a', '#ffffff'], 260, 160);
-    if (L === TOTAL) Snd.funny(); else Snd.win();
-    setGoButton();
-  }
-  function onDead(why) {
-    G.state = 'end'; G.endKind = 'lose'; G.endT = 0; G.why = why;
-    var h = G.world.hero;
-    burst(h.x, Math.min(h.y, 570), 26, ['#ffffff', '#c9d0ff', '#000000'], 230, 120);
-    G.shake = 0.35;
-    Snd.lose();
-  }
-  var WHY = {
-    spikes: 'Шипы! Нарисуй путь выше или перепрыгни их по склону.',
-    fall: 'Человечек упал в пропасть. Построй мост!',
-    crash: 'Слишком сильное падение. Сделай спуск положе.',
-    time: 'Время вышло. Попробуй другой путь.'
-  };
-  function showEnd() {
-    if (G.endKind === 'win') {
-      if (G.level === TOTAL) { $('ovFinal').classList.add('on'); }
-      else {
-        $('winTitle').textContent = 'Уровень ' + G.level + ' пройден!';
-        $('ovWin').classList.add('on');
-      }
-    } else {
-      $('loseWhy').textContent = WHY[G.why] || 'Попробуй другой путь';
-      $('ovLose').classList.add('on');
-    }
-  }
-  function nextLevel() { if (G.level < TOTAL) startLevel(G.level + 1); else show('scr-levels'); }
-
-  /* ---------------- main loop ---------------- */
-  var last = 0, acc = 0;
-  function frame(now) {
-    requestAnimationFrame(frame);
-    var dt = Math.min(0.05, (now - last) / 1000 || 0.016); last = now;
-    if (document.hidden) return;
-    if (current === 'scr-game') {
-      acc += dt;
-      var n = 0;
-      while (acc >= 1 / 60 && n < 4) { simStep(1 / 60); acc -= 1 / 60; n++; }
-      if (n === 4) acc = 0;
-      G.time += dt;
-      renderGame();
-    } else if (current === 'scr-menu') {
-      G.time += dt; renderMenu();
-    }
-  }
-
-  function simStep(dt) {
-    stepParticles(dt);
-    if (G.shake > 0) G.shake -= dt;
-    if (G.state === 'run') {
-      G.runT += dt;
-      var st = G.world.step(dt);
-      var ev = G.world.events;
-      if (ev.length) { for (var i = 0; i < ev.length; i++) if (ev[i] === 'flip') Snd.flip(); ev.length = 0; }
-      if (st === 'win') onWin();
-      else if (st === 'dead') onDead(G.world.reason);
-      else if (G.runT > RUN_TIMEOUT) { G.world.hero.driven = false; onDead('time'); }
-      // rocks must keep falling even if they are the only thing alive: handled by world.step
-    } else if (G.state === 'end') {
-      G.endT += dt;
-      G.fade = Math.max(0, 1 - Math.max(0, G.endT - 0.25) / 0.5);
-      if (G.endKind === 'win') G.world.step(dt * 0.0); // frozen
-      var delay = G.endKind === 'win' ? (G.level === TOTAL ? 1.4 : 1.0) : 0.9;
-      if (G.endT >= delay && !$('ovWin').classList.contains('on') && !$('ovLose').classList.contains('on') && !$('ovFinal').classList.contains('on')) showEnd();
-    }
-  }
-
-  /* ---------------- rendering ---------------- */
-  var LOGICAL_W = 360, LOGICAL_H = 600;
-  function renderGame() {
-    var d = G.data, wd = G.wd, w = G.world, ctx = cx, i, s, T = Art.THEMES[wd];
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(Art.bg(wd), 0, 0);
-    Art.drawBgAnim(ctx, wd, G.time);
-    var sx = 0, sy = 0;
-    if (G.shake > 0) { sx = Math.round((Math.random() - 0.5) * 6); sy = Math.round((Math.random() - 0.5) * 6); }
-    ctx.setTransform(0.5, 0, 0, 0.5, sx, sy);
-    if (G.patWd !== wd || !G.pattern) { G.pattern = Art.getPattern(ctx, wd); G.patWd = wd; }
-
-    for (i = 0; i < d.solids.length; i++) Art.drawSolid(ctx, d.solids[i], wd, G.pattern);
-
-    // goal
-    if (d.final) Art.drawFinalProps(ctx, d.goal, G.time);
-    else Art.drawBun(ctx, d.goal.x, d.goal.y + 18, G.time);
-
-    for (i = 0; i < d.hazards.length; i++) Art.drawSpikes(ctx, d.hazards[i], wd);
-
-    for (i = 0; i < w.circles.length; i++) { s = w.circles[i]; if (s.kind === 'rock') Art.drawRock(ctx, { x: s.x, y: s.y, r: s.r, ang: s.ang }); }
-
-    // strokes
-    var all = G.strokes.slice(); if (G.cur) all.push(G.cur);
-    if (all.length && G.fade > 0) {
-      ctx.save();
-      ctx.globalAlpha = G.fade;
-      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      for (var pass = 0; pass < 2; pass++) {
-        ctx.strokeStyle = pass === 0 ? '#000' : T.line;
-        ctx.lineWidth = pass === 0 ? 11 : 6;
-        for (i = 0; i < all.length; i++) {
-          var p = all[i].pts;
-          ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]);
-          if (p.length === 1) ctx.lineTo(p[0][0] + 0.1, p[0][1]);
-          for (var k = 1; k < p.length; k++) ctx.lineTo(p[k][0], p[k][1]);
-          ctx.stroke();
-        }
-      }
-      ctx.restore();
-    }
-
-    drawHeroNow(ctx);
-
-    // particles
-    for (i = 0; i < G.particles.length; i++) {
-      s = G.particles[i];
-      ctx.fillStyle = s.c; ctx.fillRect(Math.round(s.x / 2) * 2, Math.round(s.y / 2) * 2, s.s, s.s);
-    }
-  }
-
-  function drawHeroNow(ctx) {
-    var h = G.world.hero, kind = 'idle', ph;
-    if (G.state === 'end' && G.endKind === 'lose') return;
-    if (G.state === 'end' && G.endKind === 'win') {
-      var hop = Math.abs(Math.sin(G.endT * 8)) * 10;
-      Art.drawHero(ctx, 'win', h.x, h.y + h.r + 1 - hop, h.dir);
-      return;
-    }
-    if (G.state === 'run') {
-      if (h.ground || h.air < 0.12) { ph = Math.floor(G.time * 9) % 4; kind = ph === 0 ? 'a' : ph === 2 ? 'b' : 'idle'; }
-      else kind = 'fall';
-    } else {
-      kind = 'idle';
-    }
-    Art.drawHero(ctx, kind, h.x, h.y + h.r + 1, h.dir);
-  }
-
-  /* menu scene: tiny animated intro */
-  var mc = $('menuScene'), mx = mc.getContext('2d');
-  var menuPat = null, menuSolid = [{ x: 0, y: 140, w: 130, h: 40 }, { x: 250, y: 56, w: 140, h: 120 }];
-  function renderMenu() {
-    var ctx = mx, t = G.time;
-    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false;
-    var bg = Art.bg(3); ctx.drawImage(bg, 0, 40, 180, 84, 0, 0, 180, 84);
-    ctx.setTransform(0.5, 0, 0, 0.5, 0, 0);
-    if (!menuPat) menuPat = Art.getPattern(ctx, 3);
-    ctx.save(); ctx.translate(0, 0);
-    menuSolid.forEach(function (s) { Art.drawSolid(ctx, s, 3, menuPat); });
-    // ramp
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#000'; ctx.lineWidth = 11; ctx.beginPath(); ctx.moveTo(110, 142); ctx.lineTo(256, 58); ctx.stroke();
-    ctx.strokeStyle = '#ff6f6f'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(110, 142); ctx.lineTo(256, 58); ctx.stroke();
-    // hero walks and loops
-    var u = (t % 6) / 5; if (u > 1) u = 1;
-    var hx, hy;
-    if (u < 0.2) { hx = 20 + u / 0.2 * 90; hy = 128; }
-    else if (u < 0.75) { var k = (u - 0.2) / 0.55; hx = 110 + k * 146; hy = 128 - k * 84; }
-    else { var k2 = (u - 0.75) / 0.25; hx = 256 + k2 * 36; hy = 44; }
-    var ph = Math.floor(t * 9) % 4;
-    Art.drawHero(ctx, u >= 1 ? 'win' : (ph === 0 ? 'a' : ph === 2 ? 'b' : 'idle'), hx, hy + 13, 1);
-    Art.drawBun(ctx, 318, 56, t);
-    ctx.restore();
-  }
-
-  /* ---------------- layout ---------------- */
-  function layout() {
-    var st = $('stage');
-    var aw = st.clientWidth - 8, ah = st.clientHeight - 8;
-    if (aw <= 0 || ah <= 0) return;
-    var s = Math.min(aw / 360, ah / 600);
-    var w = Math.floor(360 * s), h = Math.floor(600 * s);
-    cv.style.width = (w + 8) + 'px'; cv.style.height = (h + 8) + 'px';
-  }
-  window.addEventListener('resize', layout);
-  window.addEventListener('orientationchange', function () { setTimeout(layout, 120); });
-
-  /* ---------------- settings ---------------- */
-  function refreshSettings() {
-    setToggle($('setSfx'), 'Звуки', save.sfx);
-    setToggle($('setMusic'), 'Музыка', save.music);
-    $('setReset').textContent = 'Сбросить прогресс';
-    resetArmed = false;
-  }
-  function setToggle(btn, label, on) {
-    btn.innerHTML = label + ': <b>' + (on ? 'вкл' : 'выкл') + '</b>';
-    btn.classList.toggle('off', !on);
-  }
-  var resetArmed = false, resetTimer = null;
-
-  /* ---------------- wiring ---------------- */
-  function click(id, fn) {
-    $(id).addEventListener('click', function (e) { Snd.unlock(); Snd.click(); fn(e); });
-  }
-  click('mPlay', function () { startLevel(save.unlocked); });
-  click('mLevels', function () { worldTab = worldOfLevel(save.unlocked); show('scr-levels'); });
-  click('mSettings', function () { show('scr-settings'); });
-  click('mAbout', function () { show('scr-about'); });
-  Array.prototype.forEach.call(document.querySelectorAll('[data-go]'), function (b) {
-    b.addEventListener('click', function () { Snd.unlock(); Snd.click(); show(b.getAttribute('data-go')); });
-  });
-  $('lvTabs').addEventListener('click', function (e) {
-    var b = e.target.closest('.tab'); if (!b) return;
-    Snd.click(); renderLevels(parseInt(b.getAttribute('data-w'), 10));
-  });
-  $('lvGrid').addEventListener('click', function (e) {
-    var b = e.target.closest('.lv'); if (!b || b.disabled) return;
-    Snd.unlock(); Snd.click(); startLevel(parseInt(b.getAttribute('data-l'), 10));
-  });
-  click('gBack', function () { worldTab = worldOfLevel(G.level); show('scr-levels'); });
-  click('bUndo', undo);
-  click('bClear', clearAll);
-  $('bGo').addEventListener('click', function () {
-    Snd.unlock();
-    if (G.state === 'ready') beginRun(); else { Snd.click(); resetLevel(); }
-  });
-  click('winNext', nextLevel);
-  click('winAgain', resetLevel);
-  click('winMenu', function () { worldTab = worldOfLevel(G.level); show('scr-levels'); });
-  click('loseAgain', resetLevel);
-  click('loseMenu', function () { worldTab = worldOfLevel(G.level); show('scr-levels'); });
-  click('finMenu', function () { show('scr-menu'); });
-  click('finStart', function () { startLevel(1); });
-  click('setSfx', function () { save.sfx = !save.sfx; Snd.setSfx(save.sfx); writeSave(); refreshSettings(); if (save.sfx) Snd.click(); });
-  click('setMusic', function () {
-    save.music = !save.music; Snd.setMusic(save.music); writeSave(); refreshSettings();
-    if (save.music) Snd.startMusic(G.wd);
-  });
-  click('setReset', function () {
-    var b = $('setReset');
-    if (!resetArmed) {
-      resetArmed = true; b.textContent = 'Точно? Нажми ещё раз';
-      clearTimeout(resetTimer); resetTimer = setTimeout(function () { resetArmed = false; b.textContent = 'Сбросить прогресс'; }, 3500);
-    } else {
-      var s = defaultSave(); s.sfx = save.sfx; s.music = save.music; save = s; writeSave();
-      resetArmed = false; b.textContent = 'Прогресс сброшен'; refreshMenu();
-    }
-  });
-
-  document.addEventListener('visibilitychange', function () {
-    if (document.hidden) Snd.stopMusic(); else if (save.music) Snd.startMusic(G.wd);
-  });
-  // block pinch / double-tap zoom and context menus on the playfield
-  document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
-  document.addEventListener('touchmove', function (e) { if (e.target === cv) e.preventDefault(); }, { passive: false });
-  // first touch anywhere unlocks audio and starts music
-  var musicBoot = function () { Snd.unlock(); if (save.music) Snd.startMusic(G.wd); document.removeEventListener('pointerdown', musicBoot, true); };
-  document.addEventListener('pointerdown', musicBoot, true);
-
-  /* ---------------- boot ---------------- */
-  Art.init();
-  Snd.setSfx(save.sfx); Snd.setMusic(save.music);
-  var lg = Art.logo(8); var lc = $('menuLogo'); lc.width = lg.width; lc.height = lg.height; lc.getContext('2d').drawImage(lg, 0, 0);
-  var lc2 = $('aboutLogo'); lc2.width = lg.width; lc2.height = lg.height; lc2.getContext('2d').drawImage(lg, 0, 0);
-  buildTabs();
-  worldTab = worldOfLevel(save.unlocked);
-  G.data = Lv.build(save.unlocked, VER[save.unlocked - 1] || 0);
-  G.wd = G.data.world; G.world = Lv.makeWorld(G.data);
-  refreshMenu();
-  requestAnimationFrame(frame);
-
-  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-    navigator.serviceWorker.register('sw.js').catch(function () { });
-  }
-
-  // debug / test hook
-  window.__bunup = { G: G, startLevel: startLevel, save: function () { return save; }, beginRun: beginRun, show: show };
-})();
-
+const icons={
+wk:"♔",wq:"♕",wr:"♖",wb:"♗",wn:"♘",we:"★",wp:"♙",
+bk:"♚",bq:"♛",br:"♜",bb:"♝",bn:"♞",be:"★",bp:"♟"
+};
+
+let b=[],selected=-1,turn="w",era={
+w:{first:true,dir:null,repeat:false},
+b:{first:true,dir:null,repeat:false}
+};
+
+function reset(){
+b=Array(64).fill("");
+let back=["r","n","b","q","k","b","e","r"];
+for(let x=0;x<8;x++){
+b[x]="b"+back[x];
+b[8+x]="bp";
+b[48+x]="wp";
+b[56+x]="w"+back[x];
+}
+turn="w";selected=-1;
+era={
+w:{first:true,dir:null,repeat:false},
+b:{first:true,dir:null,repeat:false}
+};
+draw();
+}
+
+function draw(){
+let board=document.getElementById("board");
+board.innerHTML="";
+for(let i=0;i<64;i++){
+let cell=document.createElement("button");
+cell.className="cell "+((Math.floor(i/8)+i%8)%2?"dark":"light");
+if(i===selected)cell.classList.add("selected");
+cell.textContent=b[i]?icons[b[i]]:"";
+cell.onclick=()=>click(i);
+board.appendChild(cell);
+}
+document.getElementById("info").textContent=
+turn==="w"?"Твой ход — белые":"Бот думает...";
+}
+
+function moves(i){
+let p=b[i],c=p[0],t=p[1],x=i%8,y=Math.floor(i/8),out=[];
+function add(nx,ny){
+if(nx<0||nx>7||ny<0||ny>7)return;
+let j=ny*8+nx;
+if(!b[j]||b[j][0]!==c)out.push(j);
+}
+if(t==="e"){
+let st=era[c];
+if(st.first){
+let d=c==="w"?-1:1;
+for(let n=1;n<8;n++)add(x,y+d*n);
+return out;
+}
+let dirs=[[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]];
+for(let [dx,dy] of dirs){
+let name=dx+","+dy;
+if(st.repeat&&st.dir!==name)continue;
+for(let n=1;n<8;n++){
+let nx=x+dx*n,ny=y+dy*n;
+if(nx<0||nx>7||ny<0||ny>7)break;
+let j=ny*8+nx;
+if(b[j]&&b[j][0]===c)break;
+out.push(j);
+if(b[j])break;
+}
+}
+return out;
+}
+if(t==="n"){
+for(let [dx,dy] of [[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]])add(x+dx,y+dy);
+return out;
+}
+let dirs=[];
+if(t==="r"||t==="q")dirs.push([1,0],[-1,0],[0,1],[0,-1]);
+if(t==="b"||t==="q")dirs.push([1,1],[1,-1],[-1,1],[-1,-1]);
+if(t==="k")dirs=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+if(t==="p"){
+let d=c==="w"?-1:1;
+add(x,y+d);
+for(let dx of [-1,1])if(x+dx>=0&&x+dx<8&&b[(y+d)*8+x+dx]&&b[(y+d)*8+x+dx][0]!==c)add(x+dx,y+d);
+return out;
+}
+for(let [dx,dy] of dirs){
+let max=t==="k"?1:7;
+for(let n=1;n<=max;n++){
+let nx=x+dx*n,ny=y+dy*n;
+if(nx<0||nx>7||ny<0||ny>7)break;
+let j=ny*8+nx;
+if(b[j]&&b[j][0]===c)break;
+out.push(j);
+if(b[j])break;
+}
+}
+return out;
+}
+
+function click(i){
+if(turn!=="w")return;
+if(selected<0){
+if(b[i]&&b[i][0]==="w")selected=i;
+}else{
+let possible=moves(selected);
+if(possible.includes(i)){
+let p=b[selected],target=b[i],t=p[1],c=p[0];
+let dx=Math.sign(i%8-selected%8);
+let dy=Math.sign(Math.floor(i/8)-Math.floor(selected/8));
+b[selected]="";
+if(t==="e"){
+let st=era[c];
+if(target){
+b[selected]=p;
+st.first=false;st.dir=null;st.repeat=false;
+}else{
+b[i]=p;
+if(st.first)st.first=false;
+else if(st.repeat){
+st.repeat=false;st.dir=null;
+}else{
+st.repeat=true;st.dir=dx+","+dy;
+}
+}
+}else b[i]=p;
+turn="b";selected=-1;draw();
+setTimeout(bot,500);
+return;
+}
+if(b[i]&&b[i][0]==="w")selected=i;
+else selected=-1;
+}
+draw();
+}
+
+function bot(){
+let all=[];
+for(let i=0;i<64;i++){
+if(b[i]&&b[i][0]==="b"){
+for(let j of moves(i))all.push([i,j]);
+}
+}
+if(!all.length){
+document.getElementById("info").textContent="У бота нет ходов!";
+return;
+}
+all.sort((a,c)=>(b[c[1]]?1:0)-(b[a[1]]?1:0));
+let [from,to]=all[Math.floor(Math.random()*Math.min(5,all.length))];
+let p=b[from],target=b[to],t=p[1],c=p[0];
+let dx=Math.sign(to%8-from%8);
+let dy=Math.sign(Math.floor(to/8)-Math.floor(from/8));
+b[from]="";
+if(t==="e"){
+let st=era[c];
+if(target){
+b[from]=p;
+st.first=false;st.dir=null;st.repeat=false;
+}else{
+b[to]=p;
+if(st.first)st.first=false;
+else if(st.repeat){st.repeat=false;st.dir=null;}
+else{st.repeat=true;st.dir=dx+","+dy;}
+}
+}else b[to]=p;
+turn="w";draw();
+}
+
+reset();
 </script>
 </body>
 </html>
